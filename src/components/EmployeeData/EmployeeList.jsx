@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './EmployeeList.css';
-import { getEmpDesignation } from "../../services/EmployeeList.js";
-
+import { getEmpList, getEmpDesignation } from "../../services/EmployeeList.js";
+import SearchEmp from "../SearchEmployee/searchEmp.jsx";
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
@@ -11,41 +11,61 @@ const EmployeeList = () => {
     const [currentPage, setCurrentPage] = useState(1); // Start on page 1
     // Number of records on a page default = 10
     const [recordsPerPage] = useState(10);
+    const [searchTerm, setSearchTerm] = useState('');
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            setError(null);
-
-            try {
-                const result = await getEmpDesignation(currentPage, recordsPerPage);
-                setEmployees(result);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         fetchData();
-    }, [currentPage, recordsPerPage]);
+    }, [currentPage]);
+
+    const fetchData = async () => {
+        if (searchTerm) {
+            return; 
+        }
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const result = await getEmpDesignation();
+            setEmployees(result);
+        } catch (error) {
+            setError(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    
+
+    const handleSearchResults = (results) => {
+        if(!results){
+            fetchData();
+            return;
+        }
+        setEmployees(results);
+        setCurrentPage(1);
+    };
+
+    
+
     const totalPages = Math.ceil(employees.length / recordsPerPage);
+    const displayedEmployees = employees.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage);
 
     return (
-      <div>
-        {error && <p>Error: {error.message}</p>}
-        {employees && employees.length > 0 && (
-          <>
-            <DataTable employees={employees.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage)} />
-            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
-          </>
-        )}
-        {!isLoading && !error && employees.length === 0 && <p>No data available</p>}
-      </div>
+        <div className="emp-list">
+            <h1>Employee List</h1>
+            <SearchEmp onSearchResults={handleSearchResults} />
+            {error && <p>Error: {error.message}</p>}
+            {employees && employees.length > 0 && (
+                <>
+                    <DataTable employees={displayedEmployees} />
+                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
+                </>
+            )}
+            {!isLoading && !error && employees.length === 0 && <p>No data available</p>}
+        </div>
     );
-    
+
 };
 
 const DataTable = ({ employees }) => {
@@ -67,9 +87,9 @@ const DataTable = ({ employees }) => {
                     <tr key={index}>
                         <td>{employee.empFirstName}</td>
                         <td>{employee.empLastName}</td>
-                        <td>{employee.cadreShortName}</td> { /*empTitle */}
+                        <td>{employee.empTitle}</td> { /*empTitle */}
                         <td>{employee.designShortName}</td>
-                        <td>{employee.designFullName}</td> {/*officeRoomNo*/}
+                        <td>{employee.officeRoomNo}</td> {/*officeRoomNo*/}
                         <td>{employee.labFullName}</td>
                         <td>{employee.addlDesign}</td>
                     </tr>
@@ -80,13 +100,13 @@ const DataTable = ({ employees }) => {
 };
 const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
     return (
-      <div>
-        <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
-      </div>
+        <div className="page-system">
+            <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} className="pre-btn">Previous</button>
+            <span>Page {currentPage} of {totalPages}</span>
+            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="next-btn">Next</button>
+        </div>
     );
-  };
+};
 
 
 export default EmployeeList;

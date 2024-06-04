@@ -3,8 +3,5 @@
     flex-direction: column;
 }
 .content{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-left: 8.5%;
 }

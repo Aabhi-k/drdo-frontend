@@ -4,7 +4,7 @@ const baseURL = "http://localhost:8080/emp";
 
 const empMasterURL = `${baseURL}/em`;
 const empDesignationURL = `${baseURL}/ed`;
-const searchURL = `${baseURL}/search`;
+const searchEmpURL = `${baseURL}/em/search`;
 
 export const getEmpList = async () => {
 
@@ -31,7 +31,7 @@ export const getEmpDesignation = async () => {
 
 export const searchEmp = async (searchTerm) => {
     try{
-        const response = await axios.get(searchURL,{
+        const response = await axios.get(searchEmpURL,{
             params:{query : searchTerm}
         });
         return response.data;

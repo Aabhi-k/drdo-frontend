@@ -1,23 +1,40 @@
-import React, {useState,useEffect} from "react";
-
+import React, { useState, useEffect, useCallback } from "react";
 import { searchEmp } from "../../services/EmployeeList";
 
-const Search = () => {
-    const [search, setSearch] = useState("");
-    const [empList, setEmpList] = useState([]);
-
+const SearchEmp = ({ onSearchResults }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  
+    const handleSearch = useCallback(async () => {
+      try {
+        const results = await searchEmp(searchTerm);
+        onSearchResults(results);
+      } catch (error) {
+        console.error("Error searching employees:", error);
+      }
+    }, [searchTerm, onSearchResults]); // Only re-create handleSearch on searchTerm or onSearchResults change
+  
     useEffect(() => {
-        searchEmp(search).then(res => {
-            setEmpList(res);
-        });
-    }, [search]);
-
+      const timeOut = setTimeout(() => {
+        if (searchTerm !== debouncedSearchTerm) {
+          setDebouncedSearchTerm(searchTerm);
+          handleSearch();
+        }
+      }, 500); // Adjust timeout as needed
+  
+      return () => clearTimeout(timeOut);
+    }, [searchTerm]); // Re-run only on searchTerm change
+  
     return (
-        <div>
-            <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
-        </div>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+      </div>
     );
-
-}
-
-export default Search;
+  };
+  
+  export default SearchEmp;
