@@ -88,4 +88,5 @@ const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
     );
   };
 
+
 export default EmployeeList;

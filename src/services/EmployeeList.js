@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-const empMasterURL = "http://localhost:8080/emp/em";
-const empDesignationURL = "http://localhost:8080/emp/ed";
+const baseURL = "http://localhost:8080/emp";
+
+const empMasterURL = `${baseURL}/em`;
+const empDesignationURL = `${baseURL}/ed`;
+const searchURL = `${baseURL}/search`;
 
 export const getEmpList = async () => {
 
@@ -20,6 +23,19 @@ export const getEmpDesignation = async () => {
         const response = await axios.get(empDesignationURL);
         return response.data;
 
+    }catch(error){
+        console.error(error);
+        throw error;
+    }
+}
+
+export const searchEmp = async (searchTerm) => {
+    try{
+        const response = await axios.get(searchURL,{
+            params:{query : searchTerm}
+        });
+        return response.data;
+        
     }catch(error){
         console.error(error);
         throw error;
