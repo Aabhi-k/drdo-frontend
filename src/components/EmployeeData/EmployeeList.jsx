@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
 import './EmployeeList.css';
 import { getEmpList, getEmpDesignation } from "../../services/EmployeeList.js";
-import SearchEmp from "../SearchEmployee/searchEmp.jsx";
+import SearchBar from "../SearchEmployee/SearchBar.jsx";
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [totalPages, setTotalPages] = useState(1);
     // Divinding data into pages
-    const [currentPage, setCurrentPage] = useState(1); // Start on page 1
+    const [currentPage, setCurrentPage] = useState(0); // Start on page 1
     // Number of records on a page default = 10
     const [recordsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState('');
 
 
     useEffect(() => {
-        fetchData();
+        fetchData(currentPage, recordsPerPage);
     }, [currentPage]);
 
-    const fetchData = async () => {
+    const fetchData = async (pageNo, sizeNo) => {
         if (searchTerm) {
-            return; 
+            return;
         }
         setIsLoading(true);
         setError(null);
 
         try {
-            const result = await getEmpDesignation();
-            setEmployees(result);
+            const result = await getEmpDesignation(pageNo , sizeNo);
+            setEmployees(result.content);
+            setTotalPages(result.totalPages);
+            
         } catch (error) {
             setError(error);
         } finally {
@@ -39,27 +42,28 @@ const EmployeeList = () => {
 
     const handleSearchResults = (results) => {
         if(!results){
-            fetchData();
+            setSearchTerm('');
+            fetchData(currentPage, recordsPerPage);
             return;
         }
-        setEmployees(results);
-        setCurrentPage(1);
+        setSearchTerm("not empty");
+        setEmployees(results.content);
+        setTotalPages(results.totalPages);
     };
 
     
 
-    const totalPages = Math.ceil(employees.length / recordsPerPage);
-    const displayedEmployees = employees.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage);
+    const displayedEmployees = employees;
 
     return (
         <div className="emp-list">
             <h1>Employee List</h1>
-            <SearchEmp onSearchResults={handleSearchResults} />
+            <SearchBar onSearchResults={handleSearchResults} />
             {error && <p>Error: {error.message}</p>}
             {employees && employees.length > 0 && (
                 <>
                     <DataTable employees={displayedEmployees} />
-                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
+                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPage = {totalPages} />
                 </>
             )}
             {!isLoading && !error && employees.length === 0 && <p>No data available</p>}
@@ -70,7 +74,7 @@ const EmployeeList = () => {
 
 const DataTable = ({ employees }) => {
     return (
-        <table border="1" cellPadding="5" cellSpacing="10" className="empTable">
+        <table border="1" cellPadding="5" cellSpacing="5" className="empTable">
             <thead>
                 <tr>
                     <th>First Name</th>
@@ -87,9 +91,9 @@ const DataTable = ({ employees }) => {
                     <tr key={index}>
                         <td>{employee.empFirstName}</td>
                         <td>{employee.empLastName}</td>
-                        <td>{employee.empTitle}</td> { /*empTitle */}
+                        <td>{employee.empTitle}</td> 
                         <td>{employee.designShortName}</td>
-                        <td>{employee.officeRoomNo}</td> {/*officeRoomNo*/}
+                        <td>{employee.officeRoomNo}</td> 
                         <td>{employee.labFullName}</td>
                         <td>{employee.addlDesign}</td>
                     </tr>
@@ -98,12 +102,12 @@ const DataTable = ({ employees }) => {
         </table>
     );
 };
-const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
+const Pagination = ({ currentPage, setCurrentPage, totalPage }) => {
     return (
         <div className="page-system">
-            <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} className="pre-btn">Previous</button>
-            <span>Page {currentPage} of {totalPages}</span>
-            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="next-btn">Next</button>
+            <button disabled={currentPage === 0} onClick={() => setCurrentPage(currentPage - 1)} className="pre-btn">Previous</button>
+            <span>Page {currentPage +1} of {totalPage}</span>
+            <button disabled={currentPage +1 === totalPage} onClick={() => setCurrentPage(currentPage+1)} className="next-btn">Next</button>
         </div>
     );
 };

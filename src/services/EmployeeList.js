@@ -4,12 +4,15 @@ const baseURL = "http://localhost:8080/emp";
 
 const empMasterURL = `${baseURL}/em`;
 const empDesignationURL = `${baseURL}/ed`;
-const searchEmpURL = `${baseURL}/em/search`;
+const searchEmpURL = `${baseURL}/ed/search`;
 
-export const getEmpList = async () => {
+export const getEmpList = async (pageNo, sizeNo) => {
 
     try{
-        const response = await axios.get(empMasterURL);
+        const response = await axios.get(empMasterURL,{
+                params: {page: pageNo, size: sizeNo }
+            }
+        );
         return response.data;
 
     }catch(error){
@@ -18,9 +21,11 @@ export const getEmpList = async () => {
     }
 }
 
-export const getEmpDesignation = async () => {
+export const getEmpDesignation = async (pageNo, sizeNo) => {
     try{ 
-        const response = await axios.get(empDesignationURL);
+        const response = await axios.get(empDesignationURL, {
+            params: {page: pageNo, size: sizeNo }
+        });
         return response.data;
 
     }catch(error){
@@ -29,10 +34,10 @@ export const getEmpDesignation = async () => {
     }
 }
 
-export const searchEmp = async (searchTerm) => {
+export const searchEmp = async (searchTerm, pageNo, sizeNo) => {
     try{
         const response = await axios.get(searchEmpURL,{
-            params:{query : searchTerm}
+            params:{query : searchTerm, page : pageNo, size : sizeNo}
         });
         return response.data;
         
