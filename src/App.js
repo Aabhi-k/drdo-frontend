@@ -5,6 +5,7 @@ import SideBar from './components/SideBar/SideBar.jsx';
 import EmployeeList from './components/EmployeeData/EmpMaster/EmployeeList.jsx';
 import EmployeeDesignation from './components/EmployeeData/EmpDesignation/EmployeeDesignation.jsx';
 import LabList from './components/LabData/LabList.jsx';
+import CreateEmpList from './components/EmployeeData/EmpMaster/CreateEmpList.jsx';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                       <Route path="/employee" element = {<EmployeeList />} />
                       <Route path="/lab" element={<LabList />} />
                       <Route path='/empdes' element={<EmployeeDesignation/>} />
+                      <Route path = "/employee/create" element= {CreateEmpList}/>
                   </Routes>
               </div>
           </div>

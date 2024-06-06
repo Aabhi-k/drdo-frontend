@@ -4,6 +4,8 @@ import { getEmpList, searchEmpMaster } from "../../../services/EmployeeList.js";
 import Pagination from "../../Pagination/Pagination.jsx";
 import SearchBar from "../../SearchBar/SearchBar.jsx";
 
+import { useNavigate } from 'react-router-dom';
+
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -47,12 +49,22 @@ const EmployeeList = () => {
         };
     }, [searchTerm]);
 
+
+    const navigate = useNavigate();
+
+    const handleCreateEmployee = () => {
+        navigate('/employee/create');
+    };
+
     return (
         <div className="emp-list">
             <h1>Employee List</h1>
 
 
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
+            <button className="create-emp" onClick={handleCreateEmployee}>
+                Create Employee
+            </button>
 
             {error && <p>Error: {error.message}</p>}
             {employees && employees.length > 0 && (
@@ -97,9 +109,5 @@ const DataTable = ({ employees }) => {
         </table>
     );
 };
-
-// prev and next button
-
-
 
 export default EmployeeList;
