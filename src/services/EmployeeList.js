@@ -52,3 +52,4 @@ export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
         throw error;
     }
 }
+
