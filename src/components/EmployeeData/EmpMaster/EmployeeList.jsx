@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import './EmployeeList.css';
-import { getEmpList, getEmpDesignation, searchEmp } from "../../services/EmployeeList.js";
-
+import { getEmpList, searchEmpMaster } from "../../../services/EmployeeList.js";
+import Pagination from "../../Pagination/Pagination.jsx";
+import SearchBar from "../../SearchBar/SearchBar.jsx";
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
@@ -24,9 +25,9 @@ const EmployeeList = () => {
         try {
             let result;
             if (term) {
-                result = await searchEmp(term, pageNo, sizeNo);
+                result = await searchEmpMaster(term, pageNo, sizeNo);
             } else {
-                result = await getEmpDesignation(pageNo, sizeNo);
+                result = await getEmpList(pageNo, sizeNo);
             }
             setEmployees(result.content);
             setTotalPages(result.totalPages);
@@ -64,26 +65,6 @@ const EmployeeList = () => {
         </div>
     );
 };
-const SearchBar = ({ searchTerm, setSearchTerm, setCurrentPage }) => {
-    const handleSearchChange = (e) => {
-        const value = e.target.value;
-        setSearchTerm(value);
-
-        if (value === '') {
-            setCurrentPage(0);
-        }
-    };
-    return (
-        <div className="search-bar">
-            <input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-            />
-        </div>
-    );
-};
 
 // emp table
 const DataTable = ({ employees }) => {
@@ -118,15 +99,7 @@ const DataTable = ({ employees }) => {
 };
 
 // prev and next button
-const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
-    return (
-        <div className="page-system">
-            <button disabled={currentPage === 0} onClick={() => setCurrentPage(currentPage - 1)} className="pre-btn">Previous</button>
-            <span>Page {currentPage + 1} of {totalPages}</span>
-            <button disabled={currentPage + 1 === totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="next-btn">Next</button>
-        </div>
-    );
-};
+
 
 
 export default EmployeeList;
