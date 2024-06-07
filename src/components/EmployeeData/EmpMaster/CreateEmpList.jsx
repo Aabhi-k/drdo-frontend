@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import SearchableDropDown from "../../../services/SearchableDropDown";
+import { empDesignationDropDownSearchURL } from "../../Config/config";
 
 const CreateEmpList = () => {
     const [newEmployeeData, setNewEmployeeData] = useState({
@@ -17,28 +19,82 @@ const CreateEmpList = () => {
         e.preventDefault();
         console.log(newEmployeeData);
     }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setNewEmployeeData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
     return (
 
         <form onSubmit={handleCreateEmployee} className="create-emp">
-            <input type="text" placeholder="Title" value={newEmployeeData.empTitle}
-                onChange={(e) => setNewEmployeeData({ ...newEmployeeData, empTitle: e.target.value })} />
 
-            <input type="text" placeholder="First Name " onChange={(e) => setNewEmployeeData({ ...newEmployeeData, empFirstName: e.target.value })}  />
-            <input type="text" placeholder="Middle Name" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, empMiddleName: e.target.value })}  />
-            <input type="text" placeholder="Last Name" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, empLastName: e.target.value })}  />
-            {/* vvvv */}
-            <input type="text" placeholder="Designation" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, empDesignId: e.target.value })}  />
-
-            <input type="text" placeholder="Office Room" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, officeRoomNo: e.target.value })}  />
-            {/* vvvv */}
-            <input type="text" placeholder="Lab Name" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, labId: e.target.value })}  />
-            {/* vvvv */}
-            <input type="text" placeholder="Employee Role" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, addlDesign: e.target.value })}  />
-            
-            <input type="text" placeholder="Additional Designation" onChange={(e) => setNewEmployeeData({ ...newEmployeeData, empRoleId: e.target.value })}  />
-
-            <button className="submit-btn" type="submit"> Create Employee</button>
+            <input
+                type="text"
+                name="empTitle"
+                placeholder="Title"
+                value={newEmployeeData.empTitle}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="empFirstName"
+                placeholder="First Name"
+                value={newEmployeeData.empFirstName}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="empMiddleName"
+                placeholder="Middle Name"
+                value={newEmployeeData.empMiddleName}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="empLastName"
+                placeholder="Last Name"
+                value={newEmployeeData.empLastName}
+                onChange={handleChange}
+            />
+            <SearchableDropDown
+                placeholder="Designation"
+                url= {empDesignationDropDownSearchURL}
+                name="empDesignId"
+                value={newEmployeeData.empDesignId}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="officeRoomNo"
+                placeholder="Office Room"
+                value={newEmployeeData.officeRoomNo}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="labId"
+                placeholder="Lab Name"
+                value={newEmployeeData.labId}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="empRoleId"
+                placeholder="Employee Role"
+                value={newEmployeeData.empRoleId}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="addlDesign"
+                placeholder="Additional Designation"
+                value={newEmployeeData.addlDesign}
+                onChange={handleChange}
+            />
+            <button className="submit-btn" type="submit">Create Employee</button>
         </form>
     );
 

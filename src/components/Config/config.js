@@ -1,19 +1,13 @@
 
-// WEBPAGE URLS
-
-const baseReactURL = "http://localhost:3000/";
-
-// Employees's URL 
-
-
-
 //SPRING API URLS
-const baseSpringURL = "http://localhost:8080/";
+const baseSpringURL = "http://localhost:8080";
 
 // Getting data
     //Employee's URL
     const empMasterURL = `${baseSpringURL}/emp/em`;
     const empDesignationURL = `${baseSpringURL}/emp/ed`;
+
+    export const empDesignationDropDownURL = `${empDesignationURL}/dropdown`;
 
     // Lab's URL
     const labMasterURL = `${baseSpringURL}/lab` ;
@@ -23,6 +17,8 @@ const baseSpringURL = "http://localhost:8080/";
     //Employee's URL
     const empMasterSearchURL = `${empMasterURL}/search`;
     const empDesignationSearchURL = `${empDesignationURL}/search`;
+
+    export const empDesignationDropDownSearchURL = `${empDesignationDropDownURL}/search`;
 
     //Lab's URL
     const labMasterSearchURL = `${labMasterURL}/search`;
@@ -38,9 +34,11 @@ const baseSpringURL = "http://localhost:8080/";
 export default{
     empMasterURL,
     empDesignationURL,
+    empDesignationDropDownURL,
     labMasterURL,
     empMasterSearchURL,
     empDesignationSearchURL,
+    empDesignationDropDownSearchURL,
     labMasterSearchURL,
     createEmpMasterURL,
     createEmpDesignationURL,

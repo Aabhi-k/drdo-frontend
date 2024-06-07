@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../components/Config/config';
 
+// GET Emp Master 
 export const getEmpList = async (pageNo, sizeNo) => {
 
     try{
@@ -15,7 +16,7 @@ export const getEmpList = async (pageNo, sizeNo) => {
         throw error;
     }
 }
-
+// GET Emp Designation
 export const getEmpDesignation = async (pageNo, sizeNo) => {
     try{ 
         const response = await axios.get(config.empDesignationURL, {
@@ -29,6 +30,9 @@ export const getEmpDesignation = async (pageNo, sizeNo) => {
     }
 }
 
+
+
+// Search Emp Master
 export const searchEmpMaster = async (searchTerm, pageNo, sizeNo) => {
     try{
         const response = await axios.get(config.empMasterSearchURL,{
@@ -41,7 +45,7 @@ export const searchEmpMaster = async (searchTerm, pageNo, sizeNo) => {
         throw error;
     }
 }
-
+// Search Emp Designation
 export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
     try{
         const response = await axios.get(config.empDesignationSearchURL, {
@@ -52,4 +56,7 @@ export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
         throw error;
     }
 }
+
+
+
 
