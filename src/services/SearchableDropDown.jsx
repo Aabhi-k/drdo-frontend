@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const SearchableDropDown = ({placeholder, url, name, value, onChange}) => {
+const SearchableDropDown = ({ placeholder, url, name, value, onChange }) => {
     const [options, setOptions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [displayValue, setDisplayValue] = useState('');
 
     useEffect(() => {
         if (searchTerm) {
@@ -23,11 +23,13 @@ const SearchableDropDown = ({placeholder, url, name, value, onChange}) => {
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
+        setDisplayValue(e.target.value);
         onChange({ target: { name, value: e.target.value } });
     };
 
-    const handleOptionSelect = (optionValue) => {
-        onChange({ target: { name, value: optionValue } });
+    const handleOptionSelect = (option) => {
+        setDisplayValue(option.name);
+        onChange({ target: { name, value: option.id } });
         setSearchTerm('');
     };
 
@@ -36,13 +38,13 @@ const SearchableDropDown = ({placeholder, url, name, value, onChange}) => {
             <input
                 type="text"
                 placeholder={placeholder}
-                value={value}
+                value={displayValue}
                 onChange={handleInputChange}
             />
             {searchTerm && options.length > 0 && (
                 <ul className="options-list">
                     {options.map(option => (
-                        <li key={option.id} onClick={() => handleOptionSelect(option.name)}>
+                        <li key={option.id} onClick={() => handleOptionSelect(option)}>
                             {option.name}
                         </li>
                     ))}
@@ -51,6 +53,5 @@ const SearchableDropDown = ({placeholder, url, name, value, onChange}) => {
         </div>
     );
 };
-
 
 export default SearchableDropDown;

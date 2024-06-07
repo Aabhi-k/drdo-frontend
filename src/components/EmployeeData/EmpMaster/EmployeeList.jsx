@@ -7,12 +7,18 @@ import SearchBar from "../../SearchBar/SearchBar.jsx";
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeList = () => {
+
+    // Handling employee data
     const [employees, setEmployees] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // Handling pages
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(0);
     const [recordsPerPage] = useState(10);
+    
+    // Handling Searching terms
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 

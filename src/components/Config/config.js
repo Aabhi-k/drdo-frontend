@@ -7,7 +7,7 @@ const baseSpringURL = "http://localhost:8080";
     const empMasterURL = `${baseSpringURL}/emp/em`;
     const empDesignationURL = `${baseSpringURL}/emp/ed`;
 
-    export const empDesignationDropDownURL = `${empDesignationURL}/dropdown`;
+    
 
     // Lab's URL
     const labMasterURL = `${baseSpringURL}/lab` ;
@@ -18,7 +18,10 @@ const baseSpringURL = "http://localhost:8080";
     const empMasterSearchURL = `${empMasterURL}/search`;
     const empDesignationSearchURL = `${empDesignationURL}/search`;
 
-    export const empDesignationDropDownSearchURL = `${empDesignationDropDownURL}/search`;
+    //DropDown Menu URL
+    export const empDesignationDropDownSearchURL = `${empDesignationURL}/dropdown/search`;
+    export const labMasterDropDownSearchURL = `${labMasterURL}/dropdown/search`;
+    export const empRoleDropDownSearchURL = `${baseSpringURL}/emp/role/dropdown/search`;
 
     //Lab's URL
     const labMasterSearchURL = `${labMasterURL}/search`;
@@ -34,7 +37,6 @@ const baseSpringURL = "http://localhost:8080";
 export default{
     empMasterURL,
     empDesignationURL,
-    empDesignationDropDownURL,
     labMasterURL,
     empMasterSearchURL,
     empDesignationSearchURL,
