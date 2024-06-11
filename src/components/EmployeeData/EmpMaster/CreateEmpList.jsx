@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SearchableDropDown from "../../../services/SearchableDropDown";
 import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL } from "../../Config/config";
+import "./CreateEmpList.css";
 
 const CreateEmpList = () => {
     const [newEmployeeData, setNewEmployeeData] = useState({

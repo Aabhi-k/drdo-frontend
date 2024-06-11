@@ -1,0 +1,19 @@
+.search-bar{
+    display: flex;
+    height: 4vh;
+    width: 35vw;
+    border-radius: 10px;
+    background-color: #e6e6e6;
+}
+.search-img{
+    margin: 8px;
+}
+.search-input{
+    font-size: 20px;
+    font-weight: 500;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    outline: none;
+}

@@ -1,7 +1,5 @@
 .App {
     display: flex;
     flex-direction: column;
-}
-.content{
-    margin-left: 8.5%;
+    margin-left: 6%;
 }

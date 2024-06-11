@@ -66,12 +66,8 @@ const EmployeeList = () => {
         <div className="emp-list">
             <h1>Employee List</h1>
 
-
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
-            <button className="create-emp" onClick={handleCreateEmployee}>
-                Create Employee
-            </button>
-
+            
             {error && <p>Error: {error.message}</p>}
             {employees && employees.length > 0 && (
                 <>
@@ -87,7 +83,7 @@ const EmployeeList = () => {
 // emp table
 const DataTable = ({ employees }) => {
     return (
-        <table border="1" cellPadding="5" cellSpacing="5" className="empTable">
+        <table cellPadding="0"  className="empTable">
             <thead>
                 <tr>
                     <th>First Name</th>
