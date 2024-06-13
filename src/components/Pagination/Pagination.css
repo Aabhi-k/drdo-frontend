@@ -1,0 +1,20 @@
+.page-system{    
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.pre-btn, .next-btn{
+    margin: 10px;
+    padding: 10px;
+    width: 80px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background-color: #e6e6e6;
+    transition: 0.2s;
+}
+
+.pre-btn:hover, .next-btn:hover{
+    transform: scale(1.1);
+}

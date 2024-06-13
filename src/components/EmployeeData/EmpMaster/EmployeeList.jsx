@@ -3,6 +3,7 @@ import './EmployeeList.css';
 import { getEmpList, searchEmpMaster } from "../../../services/EmployeeList.js";
 import Pagination from "../../Pagination/Pagination.jsx";
 import SearchBar from "../../SearchBar/SearchBar.jsx";
+import menuBar from "../../../imgs/menu.png";
 
 import { useNavigate } from 'react-router-dom';
 
@@ -17,10 +18,11 @@ const EmployeeList = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(0);
     const [recordsPerPage] = useState(10);
-    
+
     // Handling Searching terms
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
 
     useEffect(() => {
         fetchData(currentPage, recordsPerPage, debouncedSearchTerm);
@@ -62,12 +64,37 @@ const EmployeeList = () => {
         navigate('/employee/create');
     };
 
+    const handleEditEmployee = () => {
+        navigate('/employee/edit');
+    };
+
+    const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
     return (
         <div className="emp-list">
             <h1>Employee List</h1>
 
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
-            
+            <div className="table-top">
+                <SearchBar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    setCurrentPage={setCurrentPage}
+                />
+                <div className="dropdown">
+                    <button className="dropdown-toggle" onClick={toggleDropdown}>
+                        <img src={menuBar} alt="" className="menu-bar-img" width={24} />
+                    </button>
+
+                    <div className="dropdown-content">
+                        <button className="create-btn" onClick={handleCreateEmployee} >Create Employee</button>
+                        <button>Edit Employee</button>
+                    </div>
+                </div>
+
+            </div>
             {error && <p>Error: {error.message}</p>}
             {employees && employees.length > 0 && (
                 <>
@@ -83,7 +110,7 @@ const EmployeeList = () => {
 // emp table
 const DataTable = ({ employees }) => {
     return (
-        <table cellPadding="0"  className="empTable">
+        <table cellPadding="0" className="empTable">
             <thead>
                 <tr>
                     <th>First Name</th>
