@@ -11,6 +11,7 @@
 }
 
 .table-top {
+    gap: 10px;
     display: flex;
     width: 85%;
     flex-direction: row;
@@ -91,6 +92,14 @@
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+.menu-bar-img{
+    transition: 0.2s;
+    width: 24px;
+}
+.menu-bar-img:hover{
+    transform: scale(0.9);
+}
 .empTable {
     border-collapse: collapse;
     margin: 25px 0;
@@ -119,6 +128,8 @@
 }
 
 .empTable tbody tr {
+    font-size: 1em;
+    font-weight: 400;
     border-bottom: thin solid #838383;
 }
 
@@ -131,7 +142,7 @@
 }
 
 .empTable tbody tr:hover {
-    transition: 0.2s;
+    transition: 0.1s;
     background-color: #5961cd;
     color: #ffffff;
 }

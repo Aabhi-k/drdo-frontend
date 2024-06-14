@@ -29,8 +29,19 @@ export const getEmpDesignation = async (pageNo, sizeNo) => {
         throw error;
     }
 }
-
-
+// GET lab master
+export const getLabList = async (pageNo, size) => {
+    try{
+        const response = await axios.get(config.labMasterURL, {
+            params: {page: pageNo, size: size }
+        });
+        return response.data;
+    }
+    catch(error){
+        console.error(error);
+        throw error;
+    }
+}
 
 // Search Emp Master
 export const searchEmpMaster = async (searchTerm, pageNo, sizeNo) => {
@@ -56,6 +67,19 @@ export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
         throw error;
     }
 }
+
+// Search Lab Master
+export const searchLabMaster = async (searchTerm, pageNo, sizeNo) => {
+    try{
+        const response = await axios.get(config.labMasterSearchURL, {
+            params:{query : searchTerm, page : pageNo, size : sizeNo}
+        });
+        return response.data;
+    }catch(error){
+        console.error(error);
+        throw error;
+    }
+} 
 
 
 

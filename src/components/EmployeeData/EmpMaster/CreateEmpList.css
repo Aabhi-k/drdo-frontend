@@ -1,14 +1,42 @@
-.create-emp{
-    background-color: #ffffff;
+.create-emp {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap; /* Allow form elements to wrap to next line if needed */
+    width: 100%; /* Make the form fill the available width */
+    margin: 1rem auto; /* Add some margin for better spacing */
     justify-content: center;
-}
-
-.form-group{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+  }
+  
+  .form-group {
+    outline: none;
+    margin-bottom: 1rem; /* Add some space between form groups */
+    width: 50%; /* Make each form group take up half the width */
+  }
+  
+  .create-emp input[type="text"] {
+    outline: none;
+    width: 100%; /* Make input fields take up full width of their container */
+    padding: 0.5rem 1rem; /* Add some padding for better usability */
+    border: 1px solid #ccc; /* Basic border styling */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 1rem;
+  }
+  
+  .create-emp button.submit-btn {
+    padding: 0.5rem 1rem;
+    background-color: #007bff; /* Blue background color */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer; /* Indicate clickable element */
+  }
+  
+  .create-emp button.submit-btn:hover {
+    background-color: #0069d9; /* Slightly darker blue on hover */
+  }
+  
+  .error {
+    color: red; /* Display error messages in red */
+    font-size: 0.8rem; /* Smaller font size for error messages */
+    margin-top: 0.25rem; /* Add some space above the error message */
+  }
+  

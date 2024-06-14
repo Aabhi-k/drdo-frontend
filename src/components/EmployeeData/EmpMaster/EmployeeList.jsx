@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import './EmployeeList.css';
+import { useNavigate } from 'react-router-dom';
+
 import { getEmpList, searchEmpMaster } from "../../../services/EmployeeList.js";
+// Components
 import Pagination from "../../Pagination/Pagination.jsx";
 import SearchBar from "../../SearchBar/SearchBar.jsx";
 import menuBar from "../../../imgs/menu.png";
-
-import { useNavigate } from 'react-router-dom';
+import FilterBar from "../../FilterBar/FilterBar.jsx";
 
 const EmployeeList = () => {
 
@@ -78,14 +80,16 @@ const EmployeeList = () => {
             <h1>Employee List</h1>
 
             <div className="table-top">
+                <FilterBar />
                 <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
                     setCurrentPage={setCurrentPage}
                 />
+
                 <div className="dropdown">
                     <button className="dropdown-toggle" onClick={toggleDropdown}>
-                        <img src={menuBar} alt="" className="menu-bar-img" width={24} />
+                        <img src={menuBar} alt="" className="menu-bar-img" />
                     </button>
 
                     <div className="dropdown-content">
@@ -96,21 +100,20 @@ const EmployeeList = () => {
 
             </div>
             {error && <p>Error: {error.message}</p>}
-            {employees && employees.length > 0 && (
-                <>
-                    <DataTable employees={employees} />
-                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
-                </>
-            )}
-            {!isLoading && !error && employees.length === 0 && <p>No data available</p>}
+
+
+            <DataTable employees={employees} error={error} isLoading={isLoading} />
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
+
+
         </div>
     );
 };
 
 // emp table
-const DataTable = ({ employees }) => {
+const DataTable = ({ employees, error, isLoading }) => {
     return (
-        <table cellPadding="0" className="empTable">
+        <table className="empTable">
             <thead>
                 <tr>
                     <th>First Name</th>
@@ -123,7 +126,8 @@ const DataTable = ({ employees }) => {
                 </tr>
             </thead>
             <tbody>
-                {employees.map((employee, index) => (
+
+                {employees && employees.length > 0 && employees.map((employee, index) => (
                     <tr key={index}>
                         <td>{employee.empFirstName}</td>
                         <td>{employee.empLastName}</td>
@@ -134,6 +138,14 @@ const DataTable = ({ employees }) => {
                         <td>{employee.addlDesign}</td>
                     </tr>
                 ))}
+                {/* Display message when no data found (within tbody) */}
+                {!isLoading && !error && employees.length === 0 && (
+                    <tr>
+                        <td colSpan="7" className="no-data-message">
+                            <p>No data available</p>
+                        </td>
+                    </tr>
+                )}
             </tbody>
         </table>
     );
