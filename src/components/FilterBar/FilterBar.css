@@ -1,19 +1,115 @@
-.filter-bar{
-    display: flex;
-    height: 4vh;
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
     width: 10%;
-    border-radius: 10px;
-    background-color: #e6e6e6;
+
 }
-.filter-img{
-    margin: 8px;
-}
-.filter-input{
+
+.filter-dropdown-toggle {
     font-size: 20px;
-    font-weight: 500;
-    height: 100%;
     border: none;
-    background-color: transparent;
-    width: 100%;
     outline: none;
+    color: #000000;
+    height: 40px;
+    width: 100%;
+    background-color: #dcdcdc;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.filter-dropdown-toggle:hover{
+    color: #ffffff;
+    background-color: #353a59;
+}
+
+.filter-dropdown-content {
+    display: flex;
+    position: absolute;
+    background-color: #ebebeb;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    width: 200%;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.content-div {
+    width: 100%;
+}
+.end-btns{
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.content-div button,.end-btns button {
+    border: none;
+    border-bottom: thin solid #8f8f8f;
+    float: none;
+    display: flex;
+    text-align: left;
+    color: #000000;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: 0.2s;
+    height: 60px;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.end-btns button{
+    display: flex;
+    width: 100px;
+    flex-direction: row;
+    justify-content: center;
+   
+}
+
+.filter-dropdown-content.animate-enter {
+    animation: fadeInUp 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.filter-dropdown-content button:hover {
+    border-radius: 10px;
+    background-color: #353a59;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.filter-submenu {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.radio-label input[type="radio"] {
+    margin-right: 10px;
 }

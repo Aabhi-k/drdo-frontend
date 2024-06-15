@@ -8,6 +8,7 @@ import Pagination from "../../Pagination/Pagination.jsx";
 import SearchBar from "../../SearchBar/SearchBar.jsx";
 import menuBar from "../../../imgs/menu.png";
 import FilterBar from "../../FilterBar/FilterBar.jsx";
+import Heading from "../../Heading/Heading.jsx";
 
 const EmployeeList = () => {
 
@@ -77,8 +78,7 @@ const EmployeeList = () => {
 
     return (
         <div className="emp-list">
-            <h1>Employee List</h1>
-
+            <Heading name={"Employee List"} />
             <div className="table-top">
                 <FilterBar />
                 <SearchBar

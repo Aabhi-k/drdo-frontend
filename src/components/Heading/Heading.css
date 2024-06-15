@@ -1,0 +1,15 @@
+.heading h1 {
+    margin-top: 15px;
+    padding: 2vw;
+    padding-bottom: 20px;
+    border-radius: 30px;
+    font-size: 6em;
+    font-weight: 800;
+    color: #353a59;
+}
+
+.heading hr {
+    width: 100%;
+    margin-bottom: 2vw;
+    border: 2px solid #353a59;
+}

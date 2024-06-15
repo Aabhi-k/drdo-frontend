@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchableDropDown from "../../SearchableDropDown/SearchableDropDown";
 import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL } from "../../Config/config";
 import "./CreateEmpList.css";
+import Heading from "../../Heading/Heading";
 
 const CreateEmpList = () => {
     const [newEmployeeData, setNewEmployeeData] = useState({
@@ -73,94 +74,98 @@ const CreateEmpList = () => {
 
     return (
         <form onSubmit={handleCreateEmployee} className="create-emp">
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="empTitle"
-                    placeholder="Title"
-                    value={newEmployeeData.empTitle}
-                    onChange={handleChange}
-                />
-                {errors.empTitle && <span className="error">{errors.empTitle}</span>}
-            </div>
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="empFirstName"
-                    placeholder="First Name"
-                    value={newEmployeeData.empFirstName}
-                    onChange={handleChange}
-                />
-                {errors.empFirstName && <span className="error">{errors.empFirstName}</span>}
-            </div>
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="empMiddleName"
-                    placeholder="Middle Name"
-                    value={newEmployeeData.empMiddleName}
-                    onChange={handleChange}
-                />
-                {errors.empMiddleName && <span className="error">{errors.empMiddleName}</span>}
-            </div>
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="empLastName"
-                    placeholder="Last Name"
-                    value={newEmployeeData.empLastName}
-                    onChange={handleChange}
-                />
-                {errors.empLastName && <span className="error">{errors.empLastName}</span>}
-            </div>
-            <div className="form-group">
-                <SearchableDropDown
-                    placeholder="Designation"
-                    url={empDesignationDropDownSearchURL}
-                    name="empDesignId"
-                    value={newEmployeeData.empDesignId}
-                    onChange={handleChange}
-                />
-                {errors.empDesignId && <span className="error">{errors.empDesignId}</span>}
-            </div>
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="officeRoomNo"
-                    placeholder="Office Room"
-                    value={newEmployeeData.officeRoomNo}
-                    onChange={handleChange}
-                />
-                {errors.officeRoomNo && <span className="error">{errors.officeRoomNo}</span>}
-            </div>
-            <div className="form-group">
-                <SearchableDropDown
-                    placeholder="Lab Name"
-                    url={labMasterDropDownSearchURL}
-                    name="labId"
-                    value={newEmployeeData.labId}
-                    onChange={handleChange}
-                />
-                {errors.labId && <span className="error">{errors.labId}</span>}
-            </div>
-            <div className="form-group">
-                <SearchableDropDown
-                    placeholder="Employee Role"
-                    url={empRoleDropDownSearchURL}
-                    name="empRoleId"
-                    value={newEmployeeData.empRoleId}
-                    onChange={handleChange}
-                />
-                {errors.empRoleId && <span className="error">{errors.empRoleId}</span>}
-            </div>
-            <div className="form-group">
-                <input
-                    type="text"
-                    name="addlDesign"
-                    placeholder="Additional Designation"
-                    value={newEmployeeData.addlDesign}
-                    onChange={handleChange}
-                />
+            <Heading name={"Create Employee"} />
+            <div className="form-fields">
+
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="empTitle"
+                        placeholder="Title"
+                        value={newEmployeeData.empTitle}
+                        onChange={handleChange}
+                    />
+                    {errors.empTitle && <span className="error">{errors.empTitle}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="empFirstName"
+                        placeholder="First Name"
+                        value={newEmployeeData.empFirstName}
+                        onChange={handleChange}
+                    />
+                    {errors.empFirstName && <span className="error">{errors.empFirstName}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="empMiddleName"
+                        placeholder="Middle Name"
+                        value={newEmployeeData.empMiddleName}
+                        onChange={handleChange}
+                    />
+                    {errors.empMiddleName && <span className="error">{errors.empMiddleName}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="empLastName"
+                        placeholder="Last Name"
+                        value={newEmployeeData.empLastName}
+                        onChange={handleChange}
+                    />
+                    {errors.empLastName && <span className="error">{errors.empLastName}</span>}
+                </div>
+                <div className="form-group">
+                    <SearchableDropDown
+                        placeholder="Designation"
+                        url={empDesignationDropDownSearchURL}
+                        name="empDesignId"
+                        value={newEmployeeData.empDesignId}
+                        onChange={handleChange}
+                    />
+                    {errors.empDesignId && <span className="error">{errors.empDesignId}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="officeRoomNo"
+                        placeholder="Office Room"
+                        value={newEmployeeData.officeRoomNo}
+                        onChange={handleChange}
+                    />
+                    {errors.officeRoomNo && <span className="error">{errors.officeRoomNo}</span>}
+                </div>
+                <div className="form-group">
+                    <SearchableDropDown
+                        placeholder="Lab Name"
+                        url={labMasterDropDownSearchURL}
+                        name="labId"
+                        value={newEmployeeData.labId}
+                        onChange={handleChange}
+                    />
+                    {errors.labId && <span className="error">{errors.labId}</span>}
+                </div>
+                <div className="form-group">
+                    <SearchableDropDown
+                        placeholder="Employee Role"
+                        url={empRoleDropDownSearchURL}
+                        name="empRoleId"
+                        value={newEmployeeData.empRoleId}
+                        onChange={handleChange}
+                    />
+                    {errors.empRoleId && <span className="error">{errors.empRoleId}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="addlDesign"
+                        placeholder="Additional Designation"
+                        value={newEmployeeData.addlDesign}
+                        onChange={handleChange}
+                    />
+                </div>
             </div>
             <button className="submit-btn" type="submit">Create Employee</button>
         </form>
