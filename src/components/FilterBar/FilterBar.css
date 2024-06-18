@@ -7,19 +7,22 @@
 
 .filter-dropdown-toggle {
     font-size: 20px;
-    border: none;
+    border: thin solid;
     outline: none;
-    color: #000000;
+    color: #ffffff;
     height: 40px;
     width: 100%;
-    background-color: #dcdcdc;
+    background-color: #353a59;
     border-radius: 10px;
     cursor: pointer;
     transition: 0.2s;
 }
+
+
 .filter-dropdown-toggle:hover{
+    transform: scale(1.05);
     color: #ffffff;
-    background-color: #353a59;
+    background-color: #5961cd;
 }
 
 .filter-dropdown-content {
@@ -38,12 +41,12 @@
     width: 100%;
 }
 .end-btns{
-    margin-top: 100px;
+    margin: 100px 0px 20px 0px;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 
@@ -70,11 +73,21 @@
     width: 100px;
     flex-direction: row;
     justify-content: center;
+    color: #ffffff;
+    background-color: #353a59;
+    border-radius: 15px;
    
 }
 
 .filter-dropdown-content.animate-enter {
     animation: fadeInUp 0.3s ease-in-out forwards;
+}
+.submenu-items{
+    margin: 10px;
+    height: 80px;
+}
+.submenu-items.animate-enter{
+    animation: fadeInUp 0.2s ease-in-out forwards;
 }
 
 @keyframes fadeInUp {
@@ -92,7 +105,7 @@
 
 .filter-dropdown-content button:hover {
     border-radius: 10px;
-    background-color: #353a59;
+    background-color: #5961cd;
     color: #ffffff;
     transform: scale(1.05);
 }

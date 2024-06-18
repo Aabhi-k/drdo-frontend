@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import Pagination from "../Pagination/Pagination.jsx";
+import Heading from "../Heading/Heading.jsx";
 
 const LabList = () => {
     // Handling lab data
@@ -71,8 +72,7 @@ const LabList = () => {
 
     return (
         <div className="lab-list">
-            <h1>Lab List</h1>
-
+            <Heading name={"Lab List"} />
             <div className="table-top">
 
             <SearchBar
@@ -109,8 +109,8 @@ const DataTable = ({lab}) => {
                 </tr>
             </thead>
             <tbody>
-                {lab.map((lab) => (
-                    <tr key={lab.labId}>
+                {lab.map((lab, index) => (
+                    <tr key={index}>
                         <td>{lab.labFullName}</td>
                         <td>{lab.labAuthName}</td>
                         <td>{lab.labShortName}</td>

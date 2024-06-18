@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import './SearchableDropDown.css';
 const SearchableDropDown = ({ placeholder, url, name, value, onChange }) => {
     const [options, setOptions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +13,7 @@ const SearchableDropDown = ({ placeholder, url, name, value, onChange }) => {
                     const response = await axios.get(url, {
                         params: { query: searchTerm }
                     });
-                    setOptions(response.data);
+                    setOptions(response.data.content);
                 } catch (error) {
                     console.error("Error fetching options:", error);
                 }

@@ -9,6 +9,7 @@ import SearchBar from "../../SearchBar/SearchBar.jsx";
 import menuBar from "../../../imgs/menu.png";
 import FilterBar from "../../FilterBar/FilterBar.jsx";
 import Heading from "../../Heading/Heading.jsx";
+import { labMasterDropDownSearchURL, empDesignationDropDownSearchURL } from "../../Config/config.js";
 
 const EmployeeList = () => {
 
@@ -16,6 +17,11 @@ const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const filterConfigs = [
+        { name: 'Lab', placeholder: 'Lab...', url: labMasterDropDownSearchURL },
+        { name: 'Designation', placeholder:'Designation...', url: empDesignationDropDownSearchURL},
+    ];
+
 
     // Handling pages
     const [totalPages, setTotalPages] = useState(1);
@@ -80,7 +86,7 @@ const EmployeeList = () => {
         <div className="emp-list">
             <Heading name={"Employee List"} />
             <div className="table-top">
-                <FilterBar />
+                <FilterBar filterConfigs={filterConfigs} />
                 <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}

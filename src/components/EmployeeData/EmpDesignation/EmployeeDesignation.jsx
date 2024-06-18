@@ -1,7 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { searchEmpDesignation, getEmpDesignation } from "../../../services/EmployeeList";
+import './EmployeeDesignation.css';
+
 import SearchBar from "../../SearchBar/SearchBar";
 import Pagination from "../../Pagination/Pagination";
+import Heading from "../../Heading/Heading";
 
 const EmployeeDesignation = () => {
     const [empDesignation, setempDesignation] = useState([]);
@@ -49,6 +52,7 @@ const EmployeeDesignation = () => {
 
     return (
         <div className="emp-designation">
+            <Heading name={"Employee Designation"} />
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
             {error && <p>Error: {error.message}</p>}
             {empDesignation && empDesignation.length > 0 && (

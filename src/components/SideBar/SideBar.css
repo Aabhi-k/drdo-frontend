@@ -18,6 +18,10 @@
 
 .side-bar-ul li {
     padding: 8px 20px;
+    transition: 0.3s;
+}
+.side-bar-ul li:hover{
+    transform: scale(1.15);
 }
 .side-bar-ul li::after{
     content: '';
