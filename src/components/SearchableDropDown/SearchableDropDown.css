@@ -38,7 +38,7 @@
 .searchable-dropdown .options-list li {
     padding: 10px;
     cursor: pointer;
-
+    border-bottom: thin solid #8b8b8b;
     &:hover {
         background-color: #eee;
     }

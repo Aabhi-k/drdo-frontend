@@ -19,7 +19,7 @@ const EmployeeList = () => {
     const [error, setError] = useState(null);
     const filterConfigs = [
         { name: 'Lab', placeholder: 'Lab...', url: labMasterDropDownSearchURL },
-        { name: 'Designation', placeholder:'Designation...', url: empDesignationDropDownSearchURL},
+        { name: 'Designation', placeholder: 'Designation...', url: empDesignationDropDownSearchURL },
     ];
 
 
@@ -32,12 +32,15 @@ const EmployeeList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
+    // Handling Filter
+    const [selectedFilters, setSelectedFilters] = useState({});
+
 
     useEffect(() => {
-        fetchData(currentPage, recordsPerPage, debouncedSearchTerm);
-    }, [currentPage, debouncedSearchTerm]);
+        fetchData(currentPage, recordsPerPage, debouncedSearchTerm, selectedFilters);
+    }, [currentPage, debouncedSearchTerm, selectedFilters]);
 
-    const fetchData = useCallback(async (pageNo, sizeNo, term) => {
+    const fetchData = useCallback(async (pageNo, sizeNo, term, filter) => {
         setIsLoading(true);
         setError(null);
 
@@ -46,7 +49,7 @@ const EmployeeList = () => {
             if (term) {
                 result = await searchEmpMaster(term, pageNo, sizeNo);
             } else {
-                result = await getEmpList(pageNo, sizeNo);
+                result = await getEmpList(pageNo, sizeNo, filter );
             }
             setEmployees(result.content);
             setTotalPages(result.totalPages);
@@ -82,11 +85,22 @@ const EmployeeList = () => {
         setIsOpen(!isOpen);
     };
 
+    const handleApplyFilter = (filters) => {
+        setSelectedFilters(filters);
+        setCurrentPage(0);
+
+        console.log("emplist filter check");
+        console.log(selectedFilters);
+    };
+
     return (
         <div className="emp-list">
             <Heading name={"Employee List"} />
             <div className="table-top">
-                <FilterBar filterConfigs={filterConfigs} />
+                <FilterBar
+                    filterConfigs={filterConfigs} 
+                    applyFilter={handleApplyFilter}
+                />
                 <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
@@ -100,7 +114,7 @@ const EmployeeList = () => {
 
                     <div className="dropdown-content">
                         <button className="create-btn" onClick={handleCreateEmployee} >Create Employee</button>
-                        <button>Edit Employee</button>
+                        <button className="edit-emp" onClick={handleEditEmployee}>Edit Employee</button>
                     </div>
                 </div>
 

@@ -17,10 +17,10 @@ export const getEmpList = async (pageNo, sizeNo) => {
     }
 }
 // GET Emp Designation
-export const getEmpDesignation = async (pageNo, sizeNo) => {
+export const getEmpDesignation = async (pageNo, sizeNo, filters) => {
     try{ 
         const response = await axios.get(config.empDesignationURL, {
-            params: {page: pageNo, size: sizeNo }
+            params: {page: pageNo, size: sizeNo, filter: filters }
         });
         return response.data;
 
