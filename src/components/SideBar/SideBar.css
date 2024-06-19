@@ -17,6 +17,7 @@
 }
 
 .side-bar-ul li {
+    border-radius: 20px;
     padding: 8px 20px;
     transition: 0.3s;
 }
@@ -31,7 +32,10 @@
     display: block;
     margin: auto;
     transition: 0.5s;
-
+}
+.side-bar-ul li:active{
+    transform: scale(0.9);
+    background: #dbd8e32b;
 }
 .side-bar-ul li:hover::after{
     width: 80%;

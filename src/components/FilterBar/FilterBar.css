@@ -36,7 +36,6 @@
     flex-direction: column;
     align-items: flex-start;
 }
-
 .content-div {
     width: 100%;
 }
@@ -79,6 +78,7 @@
    
 }
 
+
 .filter-dropdown-content.animate-enter {
     animation: fadeInUp 0.3s ease-in-out forwards;
 }
@@ -106,8 +106,12 @@
 .filter-dropdown-content button:hover {
     border-radius: 10px;
     background-color: #5961cd;
-    color: #ffffff;
+        color: #ffffff;
     transform: scale(1.05);
+}
+
+.filter-dropdown button:active, .end-btns button:active {
+    transform: scale(0.9);
 }
 
 .filter-submenu {
