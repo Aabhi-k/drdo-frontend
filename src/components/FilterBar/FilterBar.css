@@ -107,11 +107,11 @@
     border-radius: 10px;
     background-color: #5961cd;
         color: #ffffff;
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .filter-dropdown button:active, .end-btns button:active {
-    transform: scale(0.9);
+    transform: scale(0.95);
 }
 
 .filter-submenu {

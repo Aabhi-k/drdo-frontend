@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import "./SideBar.css";
+
 import emp from "../../imgs/employee.png";
 import lab from "../../imgs/lab.png";
 const SideBar = () => {

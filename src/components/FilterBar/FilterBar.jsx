@@ -10,6 +10,8 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [filters, setFilters] = useState({});
   const [selectedFilters, setSelectedFilters] = useState({});
+  const [errors, setErrors] = useState({});
+
   const dropdownRef = useRef(null);
 
   const toggleMenu = () => {
@@ -23,7 +25,10 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
 
   const handleOutsideClick = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      closeMenu();
+      const isDropdownElement = event.target.closest('.options-list');
+      if (!isDropdownElement) {
+        closeMenu();
+      }
     }
   };
 
@@ -33,7 +38,6 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
     } else {
       document.removeEventListener('mousedown', handleOutsideClick);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
@@ -47,37 +51,42 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
     }
   };
 
-  const handleSubmenuItemClick = (subItem, submenu) => {
+  const handleSubmenuItemClick = (selectedOption, submenu) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [submenu]: subItem,
+      [submenu]: selectedOption,
     }));
-    console.log(`Selected in ${submenu}: ${subItem}`);
+    console.log(`Selected in ${submenu}: ${selectedOption.name}`);
   };
 
   const countActiveFilters = () => {
-    return Object.values(selectedFilters).filter(value => value).length;
+    return Object.keys(filters).length;
   };
 
   const handleApply = () => {
     setSelectedFilters(filters);
-    applyFilter(selectedFilters);
+    applyFilter(filters);
     closeMenu();
-
-
   };
 
   const handleReset = () => {
     setFilters({});
     setSelectedFilters({});
-    applyFilter(selectedFilters);
+    applyFilter({});
     closeMenu();
+  };
+
+  const handleDropdownError = (name, error) => {
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: error ? `${name} is required.` : '',
+    }));
   };
 
   return (
     <div className="filter-dropdown" ref={dropdownRef}>
       <button className="filter-dropdown-toggle" onClick={toggleMenu}>
-        <FontAwesomeIcon icon={faFilter} /> 
+        <FontAwesomeIcon icon={faFilter} />
         Filter{countActiveFilters() > 0 && ` (${countActiveFilters()})`}
       </button>
       {isOpen && (
@@ -91,13 +100,22 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
                     placeholder={config.placeholder}
                     url={config.url}
                     name={config.name}
-                    value={config.value}
-                    onChange={(e) => handleSubmenuItemClick(e.target.value, config.name)}
+                    onChange={(selectedOption) => handleSubmenuItemClick(selectedOption, config.name)}
+                    onError={(error) => handleDropdownError(config.name, error)}
                   />
                 </div>
               )}
             </div>
           ))}
+          <div className="selected-filter">
+            <span>Selected Filters</span>
+            {Object.entries(selectedFilters).map(([key, value]) => (
+              <div key={key}>
+                <span>{key}</span>
+                <span>{value.name}</span> {/* Displaying the name of the selected filter */}
+              </div>
+            ))}
+          </div>
           <div className="end-btns">
             <button onClick={handleReset}>Reset</button>
             <button onClick={handleApply}>Apply</button>

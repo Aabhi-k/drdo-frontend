@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import './SearchableDropDown.css';
-const SearchableDropDown = ({ placeholder, url, name, value, onChange }) => {
+
+const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
     const [options, setOptions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [displayValue, setDisplayValue] = useState('');
+    const [isError, setIsError] = useState(false);
+    const debounceTimeoutRef = useRef(null);
+    const isSelectingRef = useRef(false);
 
     useEffect(() => {
         if (searchTerm) {
@@ -18,34 +22,59 @@ const SearchableDropDown = ({ placeholder, url, name, value, onChange }) => {
                     console.error("Error fetching options:", error);
                 }
             };
-            fetchOptions();
+
+            // Debounce the fetch call
+            clearTimeout(debounceTimeoutRef.current);
+            debounceTimeoutRef.current = setTimeout(fetchOptions, 200);
+        } else {
+            setOptions([]);
         }
     }, [searchTerm, url]);
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
         setDisplayValue(e.target.value);
-        onChange({ target: { name, value: e.target.value } });
+        setIsError(false);
+        onError(false); // Clear error state on input change
     };
 
     const handleOptionSelect = (option) => {
+        isSelectingRef.current = true;
+        setIsError(false);
+        onError(false); 
         setDisplayValue(option.name);
         onChange({ target: { name, value: option.id } });
         setSearchTerm('');
+        setOptions([]); 
+        setTimeout(() => {
+            isSelectingRef.current = false;
+        }, 0);
+    };
+
+    const handleBlur = () => {
+        if (!isSelectingRef.current) {
+            const selectedOption = options.find(option => option.name === displayValue);
+            if (!selectedOption) {
+                setIsError(true);
+                onError(true); // Set error state on blur if no valid option is selected
+                onChange({ target: { name, value: '' } });
+            }
+        }
     };
 
     return (
-        <div className="searchable-dropdown">
+        <div className={`searchable-dropdown ${isError ? 'list-error' : ''}`}>
             <input
                 type="text"
                 placeholder={placeholder}
                 value={displayValue}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
             />
             {searchTerm && options.length > 0 && (
                 <ul className="options-list">
-                    {options.map(option => (
-                        <li key={option.id} onClick={() => handleOptionSelect(option)}>
+                    {options.map((option) => (
+                        <li key={option.id} onMouseDown={() => handleOptionSelect(option)}>
                             {option.name}
                         </li>
                     ))}

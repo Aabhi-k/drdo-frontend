@@ -43,3 +43,8 @@
         background-color: #eee;
     }
 }
+.searchable-dropdown.list-error input {
+    color: red;
+    border:thin solid red;
+}
+

@@ -42,7 +42,7 @@ const CreateEmpList = () => {
     const validateForm = () => {
         const validationErrors = {};
 
-        if (!newEmployeeData.empTitle.trim()) {
+        if (!newEmployeeData.empTitle.trim() ) {
             validationErrors.empTitle = 'Title is required.';
         }
 
@@ -70,6 +70,12 @@ const CreateEmpList = () => {
         }
 
         return validationErrors;
+    };
+     const handleDropdownError = (name, error) => {
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: error ? `${name} is required.` : '',
+        }));
     };
 
     return (
@@ -122,8 +128,8 @@ const CreateEmpList = () => {
                         placeholder="Designation"
                         url={empDesignationDropDownSearchURL}
                         name="empDesignId"
-                        value={newEmployeeData.empDesignId}
                         onChange={handleChange}
+                        onError={(error) => handleDropdownError('Designation', error)}
                     />
                     {errors.empDesignId && <span className="error">{errors.empDesignId}</span>}
                 </div>
@@ -142,8 +148,8 @@ const CreateEmpList = () => {
                         placeholder="Lab Name"
                         url={labMasterDropDownSearchURL}
                         name="labId"
-                        value={newEmployeeData.labId}
                         onChange={handleChange}
+                        onError={(error) => handleDropdownError('Lab Name', error)}
                     />
                     {errors.labId && <span className="error">{errors.labId}</span>}
                 </div>
@@ -152,8 +158,8 @@ const CreateEmpList = () => {
                         placeholder="Employee Role"
                         url={empRoleDropDownSearchURL}
                         name="empRoleId"
-                        value={newEmployeeData.empRoleId}
                         onChange={handleChange}
+                        onError={(error) => handleDropdownError('Employee Role', error)}
                     />
                     {errors.empRoleId && <span className="error">{errors.empRoleId}</span>}
                 </div>
