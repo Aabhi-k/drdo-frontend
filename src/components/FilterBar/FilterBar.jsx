@@ -3,7 +3,6 @@ import './FilterBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import SearchableDropDown from "../SearchableDropDown/SearchableDropDown";
-import { labMasterDropDownSearchURL } from "../Config/config";
 
 const FilterBar = ({ filterConfigs, applyFilter }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,12 +10,10 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
   const [filters, setFilters] = useState({});
   const [selectedFilters, setSelectedFilters] = useState({});
   const [errors, setErrors] = useState({});
-
+  const [displayValue, setDisplayValue] = useState({});
   const dropdownRef = useRef(null);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   const closeMenu = () => {
     setIsOpen(false);
@@ -24,11 +21,8 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
   };
 
   const handleOutsideClick = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      const isDropdownElement = event.target.closest('.options-list');
-      if (!isDropdownElement) {
-        closeMenu();
-      }
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !event.target.closest('.options-list')) {
+      closeMenu();
     }
   };
 
@@ -43,37 +37,16 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
     };
   }, [isOpen]);
 
-  const handleItemClick = (item) => {
-    if (openSubmenu === item) {
-      setOpenSubmenu(null);
-    } else {
-      setOpenSubmenu(item);
-    }
-  };
-
-  const handleSubmenuItemClick = (selectedOption, submenu) => {
+  const handleItemClick = (item) => setOpenSubmenu(openSubmenu === item ? null : item);
+  const handleSubmenuItemClick = (e) => {
+    const { name, value, label } = e.target;
+    console.log(name, value, label);
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [submenu]: selectedOption,
+      [name]: value,
     }));
-    console.log(`Selected in ${submenu}: ${selectedOption.name}`);
-  };
-
-  const countActiveFilters = () => {
-    return Object.keys(filters).length;
-  };
-
-  const handleApply = () => {
-    setSelectedFilters(filters);
-    applyFilter(filters);
-    closeMenu();
-  };
-
-  const handleReset = () => {
-    setFilters({});
-    setSelectedFilters({});
-    applyFilter({});
-    closeMenu();
+    setDisplayValue((prevDisplay) =>({...prevDisplay,[name]: label}));
+    
   };
 
   const handleDropdownError = (name, error) => {
@@ -81,6 +54,27 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
       ...prevErrors,
       [name]: error ? `${name} is required.` : '',
     }));
+  };
+
+  const countActiveFilters = () => Object.keys(selectedFilters).length;
+
+  const handleApply = () => {
+    if (Object.values(errors).some(error => error)) {
+      alert("Please resolve the errors before applying the filters.");
+      return;
+    }
+    setSelectedFilters(displayValue);
+    applyFilter(filters);
+    closeMenu();
+  };
+
+  const handleReset = () => {
+    setFilters({});
+    setSelectedFilters({});
+    setDisplayValue({});
+    setErrors({});
+    applyFilter({});
+    closeMenu();
   };
 
   return (
@@ -91,7 +85,7 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
       </button>
       {isOpen && (
         <div className="filter-dropdown-content animate-enter">
-          {filterConfigs.map((config) => (
+          {filterConfigs.map(config => (
             <div className="content-div" key={config.name}>
               <button onClick={() => handleItemClick(config.name)}>{config.name}</button>
               {openSubmenu === config.name && (
@@ -100,19 +94,20 @@ const FilterBar = ({ filterConfigs, applyFilter }) => {
                     placeholder={config.placeholder}
                     url={config.url}
                     name={config.name}
-                    onChange={(selectedOption) => handleSubmenuItemClick(selectedOption, config.name)}
+                    onChange={handleSubmenuItemClick}
                     onError={(error) => handleDropdownError(config.name, error)}
                   />
+                  {errors[config.name] && <div className="error-message">{errors[config.name]}</div>}
                 </div>
               )}
             </div>
           ))}
           <div className="selected-filter">
             <span>Selected Filters</span>
-            {Object.entries(selectedFilters).map(([key, value]) => (
-              <div key={key}>
-                <span>{key}</span>
-                <span>{value.name}</span> {/* Displaying the name of the selected filter */}
+            {Object.entries(selectedFilters).map(([name, label]) => (
+              <div key={name}>
+                <span>{name} : </span>
+                <span>{label}</span> {/* Displaying the name of the selected filter */}
               </div>
             ))}
           </div>

@@ -19,13 +19,14 @@
 }
 
 
-.filter-dropdown-toggle:hover{
+.filter-dropdown-toggle:hover {
     transform: scale(1.05);
     color: #ffffff;
     background-color: #5961cd;
 }
 
 .filter-dropdown-content {
+    top: 110%;
     display: flex;
     position: absolute;
     background-color: #ebebeb;
@@ -36,11 +37,14 @@
     flex-direction: column;
     align-items: flex-start;
 }
+
 .content-div {
+    background-color: #c3c3c3;
     width: 100%;
 }
-.end-btns{
-    margin: 100px 0px 20px 0px;
+
+.end-btns {
+    margin: 20px 0px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -49,7 +53,8 @@
 }
 
 
-.content-div button,.end-btns button {
+.content-div button,
+.end-btns button {
     border: none;
     border-bottom: thin solid #8f8f8f;
     float: none;
@@ -67,7 +72,7 @@
     align-items: center;
 }
 
-.end-btns button{
+.end-btns button {
     display: flex;
     width: 100px;
     flex-direction: row;
@@ -75,18 +80,19 @@
     color: #ffffff;
     background-color: #353a59;
     border-radius: 15px;
-   
+
 }
 
 
 .filter-dropdown-content.animate-enter {
     animation: fadeInUp 0.3s ease-in-out forwards;
 }
-.submenu-items{
+.submenu-items {
     margin: 10px;
-    height: 80px;
+    height: 60px;
 }
-.submenu-items.animate-enter{
+
+.submenu-items.animate-enter {
     animation: fadeInUp 0.2s ease-in-out forwards;
 }
 
@@ -106,11 +112,12 @@
 .filter-dropdown-content button:hover {
     border-radius: 10px;
     background-color: #5961cd;
-        color: #ffffff;
+    color: #ffffff;
     transform: scale(1.02);
 }
 
-.filter-dropdown button:active, .end-btns button:active {
+.filter-dropdown button:active,
+.end-btns button:active {
     transform: scale(0.95);
 }
 
@@ -129,4 +136,40 @@
 
 .radio-label input[type="radio"] {
     margin-right: 10px;
+}
+
+.selected-filter {
+    padding: 5%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    width: 90%;
+}
+
+.selected-filter>span {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.selected-filter>div {
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.selected-filter>div>span {
+    display: block;
+    font-size: 16px;
+    color: #555;
+}
+
+.selected-filter>div>span:first-child {
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 6px;
 }

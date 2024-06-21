@@ -32,11 +32,12 @@ const CreateEmpList = () => {
     };
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, label} = e.target;
         setNewEmployeeData(prevState => ({
             ...prevState,
             [name]: value,
         }));
+        console.log({ name, value, label });
     };
 
     const validateForm = () => {

@@ -1,11 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { getLabList, searchLabMaster} from "../../services/EmployeeList";
+import { getLabList, searchLabMaster } from "../../services/EmployeeList";
 import './LabList.css';
 import { useNavigate } from "react-router-dom";
 
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import Pagination from "../Pagination/Pagination.jsx";
 import Heading from "../Heading/Heading.jsx";
+import menuBar from "../../imgs/menu.png";
+import FilterBar from "../FilterBar/FilterBar.jsx";
+
+import { labCategoryDropDownSearchURL, labClusterDropDownSearchURL, cityDropDownSearchURL } from "../Config/config.js";
+
+
+const filterConfigs = [
+    { name: 'Cluster', placeholder: 'Cluster...', url: labClusterDropDownSearchURL },
+    { name: 'Category', placeholder: 'Category...', url: labCategoryDropDownSearchURL},
+    { name: 'City', placeholder: 'City...', url: cityDropDownSearchURL },
+];
 
 const LabList = () => {
     // Handling lab data
@@ -21,35 +32,35 @@ const LabList = () => {
     // Handling Searching terms
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    
+    // Handling Filter
+    const [selectedFilters, setSelectedFilters] = useState({});
+    const [isOpen, setIsOpen] = useState(false);
+    
+    const navigate = useNavigate();
 
-
-    useEffect(() => {
-        fetchData(currentPage, recordsPerPage, debouncedSearchTerm);
-    }, [currentPage, debouncedSearchTerm]);
-
-    const fetchData = useCallback(async (pageNo, sizeNo, term) => {
+    const fetchData = useCallback(async (pageNo, sizeNo, term, filter) => {
         setIsLoading(true);
         setError(null);
         try {
-            let result;
-            if (term) {
-                result = await searchLabMaster(term, pageNo, sizeNo);
-            }
-            else {
+            // let result;
+            const result = term
+                ? await searchLabMaster(term, filter, pageNo, sizeNo)
+                : await getLabList(filter, pageNo, sizeNo);
 
-                result = await getLabList(pageNo, sizeNo);
-            }
             setLab(result.content);
             setTotalPages(result.totalPages);
-        }
-        catch (error) {
+        } catch (error) {
             setError(error);
-        }
-        finally {
+        } finally {
             setIsLoading(false);
         }
     }, []);
 
+    useEffect(() => {
+        fetchData(currentPage, recordsPerPage, debouncedSearchTerm, selectedFilters);
+    }, [currentPage, debouncedSearchTerm, selectedFilters]);
+    
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearchTerm(searchTerm);
@@ -60,42 +71,55 @@ const LabList = () => {
         };
     }, [searchTerm]);
 
-    const navigate = useNavigate();
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
     const handleCreateLab = () => {
         navigate('/lab/create');
     };
     const handleEditLab = () => {
         navigate('/lab/edit');
     };
-    const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
-
+    const handleApplyFilter = (filters) => {
+        setSelectedFilters(filters);
+        setCurrentPage(0);
+    };
 
     return (
         <div className="lab-list">
             <Heading name={"Lab List"} />
             <div className="table-top">
+                <FilterBar filterConfigs={filterConfigs} applyFilter={handleApplyFilter} />
+                <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
 
-            <SearchBar
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            setCurrentPage={setCurrentPage} />
+                <div className="dropdown">
+                    <button className="dropdown-toggle" onClick={toggleDropdown}>
+                        <img src={menuBar} alt="" className="menu-bar-img" />
+                    </button>
+
+                    <div className="dropdown-content">
+                        <button className="create-btn" onClick={handleCreateLab} >Create Lab</button>
+                        <button className="edit-emp" onClick={handleEditLab}>Edit Lab</button>
+                    </div>
+                </div>
 
             </div>
             {error && <p>Error: {error.message}</p>}
-            {lab && lab.length > 0 && (
+            
                 <>
-                    <DataTable lab={lab} />
+                    <DataTable lab={lab} isLoading={isLoading}/>
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
                 </>
-            )}
-           
+            
+
 
         </div>
     );
 }
 
-const DataTable = ({lab}) => {
-    return(
+const DataTable = ({ lab, isLoading }) => {
+    return (
         <table className="labTable">
             <thead>
                 <tr>
@@ -109,17 +133,29 @@ const DataTable = ({lab}) => {
                 </tr>
             </thead>
             <tbody>
-                {lab.map((lab, index) => (
-                    <tr key={index}>
-                        <td>{lab.labFullName}</td>
-                        <td>{lab.labAuthName}</td>
-                        <td>{lab.labShortName}</td>
-                        <td>{lab.clusterFullName}</td>
-                        <td>{lab.catFullName}</td>
-                        <td>{lab.cityFullName}</td>
-                        <td>{lab.otherGroup}</td>
+                {lab.length > 0 ?
+                (
+                    lab.map((lab, index) => (
+                        <tr key={index}>
+                            <td>{lab.labFullName}</td>
+                            <td>{lab.labAuthName}</td>
+                            <td>{lab.labShortName}</td>
+                            <td>{lab.clusterFullName}</td>
+                            <td>{lab.catFullName}</td>
+                            <td>{lab.cityFullName}</td>
+                            <td>{lab.otherGroup}</td>
+                        </tr>
+                    ))
+
+                ): (
+                    !isLoading &&(
+                    <tr>
+                        <td colSpan="7" className="no-data-message">
+                            <p>No data available</p>
+                        </td>
                     </tr>
-                ))}
+                    )
+                )}
             </tbody>
         </table>
     );

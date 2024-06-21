@@ -43,7 +43,7 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
         setIsError(false);
         onError(false); 
         setDisplayValue(option.name);
-        onChange({ target: { name, value: option.id } });
+        onChange({ target: { name, value: option.id, label: option.name } });
         setSearchTerm('');
         setOptions([]); 
         setTimeout(() => {
@@ -52,7 +52,8 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
     };
 
     const handleBlur = () => {
-        if (!isSelectingRef.current) {
+        // Only set the error state if there was user input
+        if (!isSelectingRef.current && searchTerm.trim() !== "") {
             const selectedOption = options.find(option => option.name === displayValue);
             if (!selectedOption) {
                 setIsError(true);

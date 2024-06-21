@@ -2,84 +2,99 @@ import axios from 'axios';
 import config from '../components/Config/config';
 
 // GET Emp Master 
-export const getEmpList = async (pageNo, sizeNo) => {
+export const getEmpList = async (filters, pageNo, sizeNo) => {
+    try {
+        const filtersQueryString = Object.entries(filters)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
 
-    try{
-        const response = await axios.get(config.empMasterURL,{
-                params: {page: pageNo, size: sizeNo }
-            }
-        );
+        const url = `${config.empMasterURL}?${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
+
+        const response = await axios.get(url);
         return response.data;
 
-    }catch(error){
+    } catch (error) {
         console.error(error);
         throw error;
     }
 }
 // GET Emp Designation
-export const getEmpDesignation = async (pageNo, sizeNo, filters) => {
-    try{ 
+export const getEmpDesignation = async (pageNo, sizeNo) => {
+    try {
         const response = await axios.get(config.empDesignationURL, {
-            params: {page: pageNo, size: sizeNo, filter: filters }
+            params: { page: pageNo, size: sizeNo }
         });
         return response.data;
 
-    }catch(error){
+    } catch (error) {
         console.error(error);
         throw error;
     }
 }
 // GET lab master
-export const getLabList = async (pageNo, size) => {
-    try{
-        const response = await axios.get(config.labMasterURL, {
-            params: {page: pageNo, size: size }
-        });
+export const getLabList = async (filters, pageNo, sizeNo) => {
+    try {
+        const filtersQueryString = Object.entries(filters)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        const url = `${config.labMasterURL}?${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
+
+        const response = await axios.get(url);
         return response.data;
+
     }
-    catch(error){
+    catch (error) {
         console.error(error);
         throw error;
     }
 }
 
 // Search Emp Master
-export const searchEmpMaster = async (searchTerm, pageNo, sizeNo) => {
-    try{
-        const response = await axios.get(config.empMasterSearchURL,{
-            params:{query : searchTerm, page : pageNo, size : sizeNo}
-        });
+export const searchEmpMaster = async (searchTerm, filters, pageNo, sizeNo) => {
+    try {
+        const filtersQueryString = Object.entries(filters)
+            .map(([key, value]) => `${encodeURIComponent(`${key}`)}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        // Construct the full URL with encoded parameters
+        const url = `${config.empMasterSearchURL}?query=${encodeURIComponent(searchTerm)}&${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
+        const response = await axios.get(url);
+
         return response.data;
-        
-    }catch(error){
+
+    } catch (error) {
         console.error(error);
         throw error;
     }
 }
 // Search Emp Designation
 export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
-    try{
+    try {
         const response = await axios.get(config.empDesignationSearchURL, {
-            params:{query : searchTerm, page : pageNo, size : sizeNo}
+            params: { query: searchTerm, page: pageNo, size: sizeNo }
         });
         return response.data;
-    }catch(error){
+    } catch (error) {
         throw error;
     }
 }
 
 // Search Lab Master
-export const searchLabMaster = async (searchTerm, pageNo, sizeNo) => {
-    try{
-        const response = await axios.get(config.labMasterSearchURL, {
-            params:{query : searchTerm, page : pageNo, size : sizeNo}
-        });
+export const searchLabMaster = async (searchTerm, filters, pageNo, sizeNo) => {
+    try {
+        const filtersQueryString = Object.entries(filters)
+            .map(([key, value]) => `${encodeURIComponent(`${key}`)}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        const url = `${config.labMasterSearchURL}?query=${encodeURIComponent(searchTerm)}&${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
+        const response = await axios.get(url);
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error(error);
         throw error;
     }
-} 
+}
 
 
 

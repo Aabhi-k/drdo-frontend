@@ -6,6 +6,8 @@ import SearchableDropDown from "../SearchableDropDown/SearchableDropDown";
 import Heading from "../Heading/Heading";
 
 const UserLogin = () => {
+
+    
     return(
         <div className="login-page">
            <Heading name = {"Login"}/>
@@ -15,8 +17,8 @@ const UserLogin = () => {
                     placeholder="Lab"
                     url="http://localhost:8080/api/v1/users/search"
                     name="lab"
-                    value=""
                     onChange={() => {}}
+                    onError={() => {}}
                     />
                     <input type="text" placeholder="Password" />
                     <input type="submit" value="Login" />
