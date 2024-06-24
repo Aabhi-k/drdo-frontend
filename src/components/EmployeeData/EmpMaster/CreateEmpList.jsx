@@ -32,26 +32,38 @@ const CreateEmpList = () => {
     };
 
     const handleChange = (e) => {
-        const { name, value, label} = e.target;
+        const { name, value, label } = e.target;
         setNewEmployeeData(prevState => ({
             ...prevState,
             [name]: value,
         }));
-        console.log({ name, value, label });
     };
 
     const validateForm = () => {
         const validationErrors = {};
+        const noSpaceRegex = /^[A-Za-z]+$/; // Regex to allow only letters, no spaces
+        const noSpecialCharRegex = /^[A-Za-z]+$/; // Regex to allow only letters without special characters
 
-        if (!newEmployeeData.empTitle.trim() ) {
+        if (!newEmployeeData.empTitle.trim()) {
             validationErrors.empTitle = 'Title is required.';
+        } else if (!noSpecialCharRegex.test(newEmployeeData.empTitle)) {
+            validationErrors.empTitle = 'Title must contain only letters without special characters or spaces.';
         }
 
         if (!newEmployeeData.empFirstName.trim()) {
             validationErrors.empFirstName = 'First Name is required.';
+        } else if (!noSpaceRegex.test(newEmployeeData.empFirstName)) {
+            validationErrors.empFirstName = 'First Name must contain only letters without spaces.';
         }
+
+        if (newEmployeeData.empMiddleName && !noSpaceRegex.test(newEmployeeData.empMiddleName)) {
+            validationErrors.empMiddleName = 'Middle Name must contain only letters without spaces.';
+        }
+
         if (!newEmployeeData.empLastName.trim()) {
             validationErrors.empLastName = 'Last Name is required.';
+        } else if (!noSpaceRegex.test(newEmployeeData.empLastName)) {
+            validationErrors.empLastName = 'Last Name must contain only letters without spaces.';
         }
 
         if (!newEmployeeData.empDesignId) {
@@ -60,6 +72,8 @@ const CreateEmpList = () => {
 
         if (!newEmployeeData.officeRoomNo.trim()) {
             validationErrors.officeRoomNo = 'Office Room No. is required.';
+        } else if (/[^A-Za-z0-9]/.test(newEmployeeData.officeRoomNo)) {
+            validationErrors.officeRoomNo = 'Office Room No. must not contain special characters or spaces.';
         }
 
         if (!newEmployeeData.labId) {
@@ -72,7 +86,8 @@ const CreateEmpList = () => {
 
         return validationErrors;
     };
-     const handleDropdownError = (name, error) => {
+
+    const handleDropdownError = (name, error) => {
         setErrors(prevErrors => ({
             ...prevErrors,
             [name]: error ? `${name} is required.` : '',
