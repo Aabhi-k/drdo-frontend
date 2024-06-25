@@ -11,15 +11,6 @@
     margin: 25px 0;
     min-width: 85%;
     box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.15);
-    border-radius: 20px;
-}
-
-.labTable thead th:first-child {
-    border-top-left-radius: 20px;
-}
-
-.labTable thead th:last-child {
-    border-top-right-radius: 20px;
 }
 
 .labTable thead tr {

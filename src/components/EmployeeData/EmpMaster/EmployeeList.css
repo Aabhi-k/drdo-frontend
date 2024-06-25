@@ -30,7 +30,7 @@
 
 .dropdown-content {
     border-radius: 20px;
-    display: block;
+    display: none;
     position: absolute;
     background-color: #ebebeb;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -40,7 +40,7 @@
 
 .dropdown-content button {
     float: none;
-    margin: 20px;
+    margin-top: 2px;
     display: block;
     text-align: left;
     background-color: white;
@@ -102,20 +102,7 @@
     margin: 25px 0;
     min-width: 85%;
     box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.15);
-    -moz-border-radius:20px;
-    -webkit-border-radius:20px;
-    border-radius: 20px;
-}
-.empTable:hover{
-    border-radius: 20px;
-}
-
-.empTable thead th:first-child {
-    border-top-left-radius: 20px;
-}
-
-.empTable thead th:last-child {
-    border-top-right-radius: 20px;
+    
 }
 
 .empTable thead tr {
@@ -144,13 +131,8 @@
     border-bottom: 2px solid #353a59;
 }
 
-
-
-.empTable tbody tr:last-child:hover{
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
 .empTable tbody tr:hover {
-    transition: 0.1s;
-    box-shadow: inset 0 0 0 5px #5961cd;
+    transition: 0.2s;
+    background-color: #5961cd;
+    color: #ffffff;
 }

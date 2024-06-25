@@ -96,6 +96,19 @@ export const searchLabMaster = async (searchTerm, filters, pageNo, sizeNo) => {
     }
 }
 
+// Create Emp Master
+export const createEmpMaster = async (employeeData) =>{
+    try{
+        const response = axios.post(config.createEmpMasterURL, employeeData);
+        return response.data;
+
+    }catch (error){
+        console.error(error);
+        throw error;
+    }
+
+}
+
 
 
 

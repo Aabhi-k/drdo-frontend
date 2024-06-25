@@ -10,7 +10,6 @@ const SideBar = () => {
             <ul className="side-bar-ul">
                 <li><NavLink to="/employee" ><img src= {emp} alt="Employeess" width={32} /></NavLink></li>
                 <li><NavLink to="/lab" ><img src= {lab} width={32} alt="lab" /></NavLink></li>
-                <li><NavLink to="/login">Login</NavLink></li>
             </ul>
         </nav>
     );

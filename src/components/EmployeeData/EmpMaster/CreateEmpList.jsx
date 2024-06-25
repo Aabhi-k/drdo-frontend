@@ -3,36 +3,47 @@ import SearchableDropDown from "../../SearchableDropDown/SearchableDropDown";
 import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL } from "../../Config/config";
 import "./CreateEmpList.css";
 import Heading from "../../Heading/Heading";
+import { createEmpMaster } from "../../../services/EmployeeList";
+
+const initialEmployeeData = {
+    empTitle: '',
+    empFirstName: '',
+    empMiddleName: '',
+    empLastName: '',
+    empDesignId: '',
+    officeRoomNo: '',
+    labId: '',
+    empRoleId: '',
+    addlDesign: '',
+};
 
 const CreateEmpList = () => {
-    const [newEmployeeData, setNewEmployeeData] = useState({
-        empTitle: '',
-        empFirstName: '',
-        empMiddleName: '',
-        empLastName: '',
-        empDesignId: '',
-        officeRoomNo: '',
-        labId: '',
-        empRoleId: '',
-        addlDesign: '',
-    });
+    const [newEmployeeData, setNewEmployeeData] = useState(initialEmployeeData);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [submissionError, setSubmissionError] = useState('');
 
-    const [errors, setErrors] = useState({}); // State for storing validation errors
-
-    const handleCreateEmployee = (e) => {
+    const handleCreateEmployee = async (e) => {
         e.preventDefault();
-        // Validate form data here
         const validationErrors = validateForm();
-        setErrors(validationErrors); // Update errors state if any
+        setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
-            // Submit data if no errors
-            console.log(newEmployeeData); // Replace with actual submission logic (e.g., API call)
+            setIsSubmitting(true);
+            setSubmissionError('');
+            try {
+                await createEmpMaster(newEmployeeData);
+                setNewEmployeeData(initialEmployeeData);
+            } catch (error) {
+                setSubmissionError(error.message);
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
     const handleChange = (e) => {
-        const { name, value, label } = e.target;
+        const { name, value } = e.target;
         setNewEmployeeData(prevState => ({
             ...prevState,
             [name]: value,
@@ -41,8 +52,8 @@ const CreateEmpList = () => {
 
     const validateForm = () => {
         const validationErrors = {};
-        const noSpaceRegex = /^[A-Za-z]+$/; // Regex to allow only letters, no spaces
-        const noSpecialCharRegex = /^[A-Za-z]+$/; // Regex to allow only letters without special characters
+        const noSpaceRegex = /^[A-Za-z]+$/;
+        const noSpecialCharRegex = /^[A-Za-z]+$/;
 
         if (!newEmployeeData.empTitle.trim()) {
             validationErrors.empTitle = 'Title is required.';
@@ -98,7 +109,6 @@ const CreateEmpList = () => {
         <form onSubmit={handleCreateEmployee} className="create-emp">
             <Heading name={"Create Employee"} />
             <div className="form-fields">
-
                 <div className="form-group">
                     <input
                         type="text"
@@ -189,7 +199,10 @@ const CreateEmpList = () => {
                     />
                 </div>
             </div>
-            <button className="submit-btn" type="submit">Create Employee</button>
+            <button className="submit-btn" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create Employee'}
+            </button>
+            {submissionError && <span className="error">{submissionError}</span>}
         </form>
     );
 }

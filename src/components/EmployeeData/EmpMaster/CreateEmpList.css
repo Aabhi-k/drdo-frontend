@@ -1,57 +1,77 @@
+/* CreateEmpList.css */
+
 .create-emp {
   display: flex;
-  width: 85%;
-  margin: 1rem auto;
-  justify-content: center;
-  gap: 20px;
   flex-direction: column;
-  align-content: center;
   align-items: center;
-  flex-wrap: wrap;
-}
-
-
-.form-group {
-  outline: none;
-  margin-bottom: 1rem;
-  width: 20%;
 }
 .form-fields{
-  display: flex;
-  outline: none;
-  width: 90%;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-/* 
-.create-emp input[type="text"] {
-  outline: none;
-  width: 90%;
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.create-emp button.submit-btn {
-  padding: 0.5rem 1rem;
-  background-color: #353a59;
+.create-emp .form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.create-emp .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-emp .form-group input,
+.create-emp .form-group{
+  width: 90%;
+  margin: 0;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.create-emp .form-group input:focus,
+.create-emp .form-group .searchable-dropdown:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.create-emp .form-group .error {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.create-emp .submit-btn {
+  padding: 10px 20px;
+  font-size: 16px;
   color: #fff;
+  background-color: #007bff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-} */
-
-.create-emp button.submit-btn:hover {
-  background-color: #353a59;
+  transition: background-color 0.3s ease;
 }
 
-.error {
-  color: red;
-  /* Display error messages in red */
-  font-size: 0.8rem;
-  /* Smaller font size for error messages */
-  margin-top: 0.25rem;
-  /* Add some space above the error message */
+.create-emp .submit-btn:disabled {
+  background-color: #999999;
+  cursor: not-allowed;
+}
+
+.create-emp .submit-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.create-emp .error {
+  color: #ff0000;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
 }
