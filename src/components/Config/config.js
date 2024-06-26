@@ -1,11 +1,12 @@
 
 //SPRING API URLS
 const baseSpringURL = "http://localhost:8080/api";
+const baseDropdownURL = `${baseSpringURL}/dropdown`;
 
 // Getting data
     //Employee's URL
-    const empMasterURL = `${baseSpringURL}/emp/em`;
-    const empDesignationURL = `${baseSpringURL}/emp/ed`;
+    const empMasterURL = `${baseSpringURL}/emp/list`;
+    const empDesignationURL = `${baseSpringURL}/emp/designation`;
     
 
     // Lab's URL
@@ -17,17 +18,19 @@ const baseSpringURL = "http://localhost:8080/api";
     const empMasterSearchURL = `${empMasterURL}/search`;
     const empDesignationSearchURL = `${empDesignationURL}/search`;
 
-    //DropDown Menu URL
-    export const empDesignationDropDownSearchURL = `${empDesignationURL}/dropdown/search`;
-    export const labMasterDropDownSearchURL = `${labMasterURL}/dropdown/search`;
-    export const labCategoryDropDownSearchURL = `${baseSpringURL}/lab/category/dropdown/search`;
-    export const labClusterDropDownSearchURL = `${baseSpringURL}/lab/cluster/dropdown/search`;
-
-    export const cityDropDownSearchURL = `${baseSpringURL}/city/dropdown/search`;
-    export const empRoleDropDownSearchURL = `${baseSpringURL}/emp/role/dropdown/search`;
-
     //Lab's URL
     const labMasterSearchURL = `${labMasterURL}/search`;
+
+
+    //DropDown Menu URL
+
+    export const labMasterDropDownSearchURL = `${baseDropdownURL}/lab/list/search`;
+    export const labCategoryDropDownSearchURL = `${baseDropdownURL}/lab/category/search`;
+    export const labClusterDropDownSearchURL = `${baseDropdownURL}/lab/cluster/search`;
+    export const cityDropDownSearchURL = `${baseDropdownURL}/city/search`;
+    export const empDesignationDropDownSearchURL = `${baseDropdownURL}/emp/designation/search`;
+    export const empRoleDropDownSearchURL = `${baseDropdownURL}/emp/role/search`;
+
 
 //Insertion
     //Employee's URL
