@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import './UserLogin.css';
 import SearchableDropDown from "../SearchableDropDown/SearchableDropDown";
 import Heading from "../Heading/Heading";
 import { labMasterDropDownSearchURL } from "../Config/config";
+import { loginUser } from "../../services/login";
 
-const UserLogin = () => {
-    const [userData, setUserData] = useState({ lab: '', password: '' });
+const UserLogin = ({ onLogin }) => {
+    const [userData, setUserData] = useState({ labId: '', password: '' });
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -14,6 +17,13 @@ const UserLogin = () => {
             ...prevState,
             [name]: value,
         }));
+        // Clear errors when user starts typing again
+        if (errors[name]) {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                [name]: '',
+            }));
+        }
     };
 
     const handleDropdownError = (name, error) => {
@@ -25,20 +35,30 @@ const UserLogin = () => {
 
     const validateForm = () => {
         const validationErrors = {};
-        if (!userData.lab) validationErrors.lab = 'Lab is required.';
+        if (!userData.labId) validationErrors.labId = 'Lab ID is required.';
         if (!userData.password.trim()) validationErrors.password = 'Password is required.';
         return validationErrors;
     };
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
-            console.log(userData);
-            // Add login logic here
+            try {
+                await loginUser(userData);
+                console.log("Login successful!");
+                onLogin(true);
+                <Navigate to="/employee" />
+            } catch (error) {
+                console.error("Login error:", error);
+            }
         }
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -48,20 +68,30 @@ const UserLogin = () => {
                 <form onSubmit={handleLogin}>
                     <SearchableDropDown
                         className="searchable-dropdown"
-                        placeholder="Lab"
+                        placeholder="Lab name"
                         url={labMasterDropDownSearchURL}
-                        name="lab"
+                        name="labId"
                         onChange={handleChange}
-                        onError={(error) => handleDropdownError("lab", error)}
+                        onError={(error) => handleDropdownError("labId", error)}
                     />
-                    {errors.lab && <span className="error">{errors.lab}</span>}
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={userData.password}
-                        onChange={handleChange}
-                    />
+                    
+                    {errors.labId && <span className="error">{errors.labId}</span>}
+                    <div className="password-field">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            value={userData.password}
+                            onChange={handleChange}
+                        />
+                        <button
+                            type="button"
+                            className="toggle-password"
+                            onClick={togglePasswordVisibility}
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
+                    </div>
                     {errors.password && <span className="error">{errors.password}</span>}
                     <button className="submit-btn" type="submit">Login</button>
                 </form>

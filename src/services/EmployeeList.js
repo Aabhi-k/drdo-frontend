@@ -1,114 +1,108 @@
 import axios from 'axios';
 import config from '../components/Config/config';
+import { baseSpringURL } from '../components/Config/config';
+import api from './login';
 
-// GET Emp Master 
+// Helper function to build query strings from filters
+const buildQueryString = (filters, pageNo, sizeNo, searchTerm = '') => {
+    const filtersQueryString = Object.entries(filters)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+    const searchQueryString = searchTerm ? `query=${encodeURIComponent(searchTerm)}&` : '';
+    return `${searchQueryString}${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
+};
+
+// GET Employee Master
 export const getEmpList = async (filters, pageNo, sizeNo) => {
     try {
-        const filtersQueryString = Object.entries(filters)
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-            .join('&');
-
-        const url = `${config.empMasterURL}?${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
-
-        const response = await axios.get(url);
+        const queryString = buildQueryString(filters, pageNo, sizeNo);
+        const response = await api.get(`${config.empMasterURL}?${queryString}`);
         return response.data;
-
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching employee list:', error);
         throw error;
     }
-}
-// GET Emp Designation
+};
+
+// GET Employee Designation
 export const getEmpDesignation = async (pageNo, sizeNo) => {
     try {
-        const response = await axios.get(config.empDesignationURL, {
-            params: { page: pageNo, size: sizeNo }
-        });
+        const response = await api.get(config.empDesignationURL, { params: { page: pageNo, size: sizeNo } });
         return response.data;
-
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching employee designation:', error);
         throw error;
     }
-}
-// GET lab master
+};
+
+// GET Lab Master
 export const getLabList = async (filters, pageNo, sizeNo) => {
     try {
-        const filtersQueryString = Object.entries(filters)
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-            .join('&');
-
-        const url = `${config.labMasterURL}?${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
-
-        const response = await axios.get(url);
+        const queryString = buildQueryString(filters, pageNo, sizeNo);
+        const response = await api.get(`${config.labMasterURL}?${queryString}`);
         return response.data;
-
-    }
-    catch (error) {
-        console.error(error);
+    } catch (error) {
+        console.error('Error fetching lab list:', error);
         throw error;
     }
-}
+};
 
-// Search Emp Master
+// Search Employee Master
 export const searchEmpMaster = async (searchTerm, filters, pageNo, sizeNo) => {
     try {
-        const filtersQueryString = Object.entries(filters)
-            .map(([key, value]) => `${encodeURIComponent(`${key}`)}=${encodeURIComponent(value)}`)
-            .join('&');
-
-        // Construct the full URL with encoded parameters
-        const url = `${config.empMasterSearchURL}?query=${encodeURIComponent(searchTerm)}&${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
-        const response = await axios.get(url);
-
+        const queryString = buildQueryString(filters, pageNo, sizeNo, searchTerm);
+        const response = await api.get(`${config.empMasterSearchURL}?${queryString}`);
         return response.data;
-
     } catch (error) {
-        console.error(error);
+        console.error('Error searching employee master:', error);
         throw error;
     }
-}
-// Search Emp Designation
+};
+
+// Search Employee Designation
 export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
     try {
-        const response = await axios.get(config.empDesignationSearchURL, {
-            params: { query: searchTerm, page: pageNo, size: sizeNo }
-        });
+        const response = await api.get(config.empDesignationSearchURL, { params: { query: searchTerm, page: pageNo, size: sizeNo } });
         return response.data;
     } catch (error) {
+        console.error('Error searching employee designation:', error);
         throw error;
     }
-}
+};
 
 // Search Lab Master
 export const searchLabMaster = async (searchTerm, filters, pageNo, sizeNo) => {
     try {
-        const filtersQueryString = Object.entries(filters)
-            .map(([key, value]) => `${encodeURIComponent(`${key}`)}=${encodeURIComponent(value)}`)
-            .join('&');
-
-        const url = `${config.labMasterSearchURL}?query=${encodeURIComponent(searchTerm)}&${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
-        const response = await axios.get(url);
+        const queryString = buildQueryString(filters, pageNo, sizeNo, searchTerm);
+        const response = await api.get(`${config.labMasterSearchURL}?${queryString}`);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error('Error searching lab master:', error);
         throw error;
     }
-}
+};
 
-// Create Emp Master
-export const createEmpMaster = async (employeeData) =>{
-    try{
-        const response = axios.post(config.createEmpMasterURL, employeeData);
+// Create Employee Master
+export const createEmpMaster = async (employeeData) => {
+    try {
+        const response = await api.post(config.createEmpMasterURL, employeeData);
         return response.data;
-
-    }catch (error){
-        console.error(error);
+    } catch (error) {
+        console.error('Error creating employee master:', error);
         throw error;
     }
+};
 
-}
-
-
+export const dropdownSearch = async (url, searchTerm) => {
+    try {
+        const response = await api.get(url, {
+            params: { query: searchTerm },
+        });
+        return response.data.content;
+    } catch (error) {
+        console.error("Error fetching options:", error);
+        throw error;
+    }
+};
 
 

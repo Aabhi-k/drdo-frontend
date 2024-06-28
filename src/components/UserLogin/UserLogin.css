@@ -21,17 +21,41 @@
     flex-direction: column;
 }
 
-.login-form input[type="password"] {
+.login-form input[type="password"],
+.login-form input[type="text"] {
     padding: 10px;
-    margin: 20px 0;
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.login-form input[type="password"]:focus {
+.login-form input[type="password"]:focus,
+.login-form input[type="text"]:focus {
     border-color: #007BFF;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field input[type="password"] {
+    padding-right: 30px; /* Space for the toggle button */
+}
+
+.password-field .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
 }
 
 .submit-btn {
@@ -43,6 +67,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 100%;
 }
 
 .submit-btn:hover {
