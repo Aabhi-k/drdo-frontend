@@ -2,26 +2,23 @@
     width: 100%;
     position: relative;
     display: inline-block;
-}
-
-.searchable-dropdown input {
-    text-indent: 10px;
-    width: 100%;
-    padding: 10px 0;
+  }
+  
+  .searchable-dropdown input {
+    padding: 10px; /* Consistent padding throughout */
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 5px; /* Reduced corner radius for a sleeker look */
     font-size: 16px;
-}
-
-.searchable-dropdown input:focus {
-    border: thin solid;
-    border-color: #66afe9;
-    outline: none;
-}
-
-.searchable-dropdown .options-list {
+    outline: none; /* Remove default outline */
+  }
+  
+  .searchable-dropdown input:focus {
+    border-color: #66afe9; /* Consistent focus color */
+  }
+  
+  .searchable-dropdown .options-list {
     position: absolute;
-    top: 100%;
+    top: 100%; /* Maintain positioning relative to input */
     left: 0;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -32,18 +29,66 @@
     z-index: 1;
     max-height: 200px;
     overflow-y: auto;
-}
-
-.searchable-dropdown .options-list li {
-    padding: 10px;
+  }
+  
+  .searchable-dropdown .options-list li {
+    padding: 10px; /* Consistent padding throughout */
     cursor: pointer;
-    border-bottom: thin solid #8b8b8b;
+    border-bottom: 1px solid #ddd; /* Lighter border color */
     &:hover {
-        background-color: #eee;
+      background-color: #f5f5f5; /* Lighter hover color */
     }
-}
-.searchable-dropdown.list-error input {
+  }
+  
+  .searchable-dropdown.list-error input {
     color: red;
-    border:thin solid red;
-}
-
+    border-color: red;
+  }
+  .searchable-dropdown {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .searchable-dropdown input {
+    padding: 10px; 
+    border: 1px solid #ccc;
+    border-radius:15px; 
+    font-size: 16px;
+    outline: none; 
+    width: 90%;
+  }
+  
+  .searchable-dropdown input:focus {
+    border-color: #66afe9;
+  }
+  
+  .searchable-dropdown .options-list {
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .searchable-dropdown .options-list li {
+    padding: 10px; 
+    cursor: pointer;
+    border-bottom: 1px solid #ddd; 
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+  
+  .searchable-dropdown.list-error input {
+    color: red;
+    border-color: red;
+  }
+    

@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRouter/PrivateRouter';
 import SideBar from './components/SideBar/SideBar';
 
@@ -8,21 +8,31 @@ import EmployeeDesignation from './components/EmployeeData/EmpDesignation/Employ
 import LabList from './components/LabData/LabList';
 import CreateEmpList from './components/EmployeeData/EmpMaster/CreateEmpList';
 import UserLogin from './components/UserLogin/UserLogin';
-import { checkTokenExpiration } from './services/login';
+import { checkTokenExpiration, setAuthToken, getRoleFromToken } from './services/login';
 
 function App() {
-    localStorage.clear();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [roles, setRoles] = useState('');
+    const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token && !checkTokenExpiration(token)) {
+            setAuthToken(token)
             setIsAuthenticated(true);
+            setRoles(getRoleFromToken())
+            setIsSuperAdmin(roles.includes("SUPER ADMIN"))            
         } else {
             setIsAuthenticated(false);
         }
+        if(isSuperAdmin){
+            console.log("super admin")
+        }
     }, []);
 
+    
     // Handle login success
     const handleLogin = () => {
 
@@ -31,32 +41,26 @@ function App() {
 
 
     // Handle logout
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-    };
+
 
     return (
         <Router>
             <div className="App">
-                <ConditionalSidebar isAuthenticated={isAuthenticated} />
+                <ConditionalSidebar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
                 <div className="content">
                     <Routes>
-                    <Route 
-                            path="/login" 
-                            element={isAuthenticated ? <Navigate to="/employee" /> : <UserLogin onLogin={handleLogin} />} 
-                        />
+                        <Route path="/login" element={isAuthenticated ? <Navigate to="/employee" /> : <UserLogin onLogin={handleLogin} />} />
 
-                        {/* Private routes */}
                         <Route element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
-                            {/* Employee */}
-                            <Route path='/employee' element={<EmployeeList />} />
-                            <Route path='/employee/create' element={<CreateEmpList />} />
-                            <Route path='/employee/designation' element={<EmployeeDesignation />} />
-                            {/* Lab */}
-                            <Route path='/lab' element={<LabList />} />
-                            <Route path='/lab/create' />
-
+            
+                            <Route path="/employee" element={<EmployeeList />} />
+                            <Route path="/employee/create" element={<CreateEmpList />} />
+                            <Route path="/employee/designation" element={<EmployeeDesignation />} />
+                            <Route path="/lab" element={<LabList />} />
+                            {/* <Route path="/lab/create" element=Lab Create Component /> */}
                         </Route>
+
+                        <Route path="*" element={isAuthenticated ? <Navigate to="/employee" /> : <Navigate to="/login" />} />
                     </Routes>
                 </div>
             </div>
@@ -64,12 +68,16 @@ function App() {
     );
 }
 
-const ConditionalSidebar = ({ isAuthenticated }) => {
+const ConditionalSidebar = ({ isAuthenticated, setIsAuthenticated }) => {
+    const handleLogout = () => {
+        localStorage.clear();
+        setIsAuthenticated(false);
+    };
     if (!isAuthenticated) {
         return null; // Hide sidebar on login page
     }
 
-    return <SideBar />;
+    return <SideBar logout={handleLogout} />;
 };
 
 export default App;

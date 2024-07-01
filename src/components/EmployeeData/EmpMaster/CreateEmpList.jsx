@@ -49,6 +49,13 @@ const CreateEmpList = () => {
             [name]: value,
         }));
     };
+    const handleClearFields = () => {
+        setNewEmployeeData(initialEmployeeData);
+        setErrors({}); // Optionally clear validation errors as well
+        setSubmissionError(''); // Clear any submission errors if needed
+    };
+
+
 
     const validateForm = () => {
         const validationErrors = {};
@@ -110,18 +117,10 @@ const CreateEmpList = () => {
             <Heading name={"Create Employee"} />
             <div className="form-fields">
                 <div className="form-group">
+                    <label htmlFor="empFirstName">First Name</label>
                     <input
                         type="text"
-                        name="empTitle"
-                        placeholder="Title"
-                        value={newEmployeeData.empTitle}
-                        onChange={handleChange}
-                    />
-                    {errors.empTitle && <span className="error">{errors.empTitle}</span>}
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
+                        id="empFirstName"
                         name="empFirstName"
                         placeholder="First Name"
                         value={newEmployeeData.empFirstName}
@@ -130,8 +129,10 @@ const CreateEmpList = () => {
                     {errors.empFirstName && <span className="error">{errors.empFirstName}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="empMiddleName">Middle Name</label>
                     <input
                         type="text"
+                        id="empMiddleName"
                         name="empMiddleName"
                         placeholder="Middle Name"
                         value={newEmployeeData.empMiddleName}
@@ -140,8 +141,10 @@ const CreateEmpList = () => {
                     {errors.empMiddleName && <span className="error">{errors.empMiddleName}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="empLastName">Last Name</label>
                     <input
                         type="text"
+                        id="empLastName"
                         name="empLastName"
                         placeholder="Last Name"
                         value={newEmployeeData.empLastName}
@@ -150,18 +153,33 @@ const CreateEmpList = () => {
                     {errors.empLastName && <span className="error">{errors.empLastName}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="empTitle">Title</label>
+                    <input
+                        type="text"
+                        id="empTitle"
+                        name="empTitle"
+                        placeholder="Title"
+                        value={newEmployeeData.empTitle}
+                        onChange={handleChange}
+                    />
+                    {errors.empTitle && <span className="error">{errors.empTitle}</span>}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="empDesignId">Designation</label>
                     <SearchableDropDown
                         placeholder="Designation"
                         url={empDesignationDropDownSearchURL}
                         name="empDesignId"
                         onChange={handleChange}
-                        onError={(error) => handleDropdownError('Designation', error)}
+                        onError={(error) => handleDropdownError('empDesignId', error)}
                     />
                     {errors.empDesignId && <span className="error">{errors.empDesignId}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="officeRoomNo">Office Room</label>
                     <input
                         type="text"
+                        id="officeRoomNo"
                         name="officeRoomNo"
                         placeholder="Office Room"
                         value={newEmployeeData.officeRoomNo}
@@ -170,28 +188,32 @@ const CreateEmpList = () => {
                     {errors.officeRoomNo && <span className="error">{errors.officeRoomNo}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="labId">Lab Name</label>
                     <SearchableDropDown
                         placeholder="Lab Name"
                         url={labMasterDropDownSearchURL}
                         name="labId"
                         onChange={handleChange}
-                        onError={(error) => handleDropdownError('Lab Name', error)}
+                        onError={(error) => handleDropdownError('labId', error)}
                     />
                     {errors.labId && <span className="error">{errors.labId}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="empRoleId">Employee Role</label>
                     <SearchableDropDown
                         placeholder="Employee Role"
                         url={empRoleDropDownSearchURL}
                         name="empRoleId"
                         onChange={handleChange}
-                        onError={(error) => handleDropdownError('Employee Role', error)}
+                        onError={(error) => handleDropdownError('empRoleId', error)}
                     />
                     {errors.empRoleId && <span className="error">{errors.empRoleId}</span>}
                 </div>
                 <div className="form-group">
+                    <label htmlFor="addlDesign">Additional Designation</label>
                     <input
                         type="text"
+                        id="addlDesign"
                         name="addlDesign"
                         placeholder="Additional Designation"
                         value={newEmployeeData.addlDesign}
@@ -199,12 +221,19 @@ const CreateEmpList = () => {
                     />
                 </div>
             </div>
-            <button className="submit-btn" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Creating...' : 'Create Employee'}
-            </button>
+            <div className="form-actions">
+                <button className="submit-emp-btn" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Creating...' : 'Create Employee'}
+                </button>
+                <button type="button" className="clear-btn" onClick={handleClearFields}>
+                    Clear
+                </button>
+            </div>
             {submissionError && <span className="error">{submissionError}</span>}
         </form>
     );
+
+
 }
 
 export default CreateEmpList;

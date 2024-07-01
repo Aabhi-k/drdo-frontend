@@ -5,73 +5,105 @@
   flex-direction: column;
   align-items: center;
 }
-.form-fields{
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+
+.form-fields {
+  width: 80%;
+  padding: 10px 20px;
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
 }
 
-.create-emp .form-fields {
+.form-group {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.create-emp .form-group {
-  display: flex;
-  flex-direction: column;
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.create-emp .form-group input,
-.create-emp .form-group{
-  width: 90%;
-  margin: 0;
-  padding: 10px;
+.form-group input,
+.form-group input {
+  text-indent: 10px;
+  width: 100%;
+  padding: 10px 0;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #c4c4c4;
   border-radius: 4px;
   transition: border-color 0.3s ease;
 }
 
-.create-emp .form-group input:focus,
-.create-emp .form-group .searchable-dropdown:focus {
+.form-group input:focus,
+.form-group .searchable-dropdown input:focus {
   border-color: #007bff;
   outline: none;
 }
 
-.create-emp .form-group .error {
+.form-group .error {
   color: #ff0000;
   font-size: 14px;
   margin-top: 5px;
 }
+.form-actions{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  gap: 50px;
+}
 
-.create-emp .submit-btn {
+.form-actions button{
+  width: 200px;
+  height: 50px;
+}
+.submit-emp-btn{
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
   background-color: #007bff;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  grid-column: span 3;
+  justify-self: center;
 }
 
-.create-emp .submit-btn:disabled {
+.submit-btn:disabled {
   background-color: #999999;
   cursor: not-allowed;
 }
 
-.create-emp .submit-btn:hover:not(:disabled) {
+.clear-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #000;
+  background-color: #ffffff;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clear-btn:hover {
+  border:2px solid #000000;
+}
+
+.submit-btn:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
-.create-emp .error {
+.error {
   color: #ff0000;
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
+  grid-column: span 3;
 }
