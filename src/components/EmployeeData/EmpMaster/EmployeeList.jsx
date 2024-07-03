@@ -73,6 +73,10 @@ const EmployeeList = () => {
         setCurrentPage(0);
     };
 
+    const handleRowClick = (id) => {
+        navigate(`/employee/details/${id}`);
+    };
+
     return (
         <div className="emp-list">
             <Heading name="Employee List" />
@@ -90,50 +94,56 @@ const EmployeeList = () => {
                 </div>
             </div>
             {error && <p>Error: {error.message}</p>}
-            <DataTable employees={employees} isLoading={isLoading} />
+            <DataTable employees={employees} isLoading={isLoading} onRowClick={handleRowClick} />
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
 
         </div>
     );
 };
 
-const DataTable = ({ employees, isLoading }) => (
-    <table className="empTable">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Title</th>
-                <th>Designation</th>
-                <th>Office Room</th>
-                <th>Lab Name</th>
-                <th>Additional Designation</th>
-            </tr>
-        </thead>
-        <tbody>
-            {employees.length > 0 ? (
-                employees.map((employee, index) => (
-                    <tr key={index}>
-                        <td>{employee.empFirstName}</td>
-                        <td>{employee.empLastName}</td>
-                        <td>{employee.empTitle}</td>
-                        <td>{employee.designShortName}</td>
-                        <td>{employee.officeRoomNo}</td>
-                        <td>{employee.labFullName}</td>
-                        <td>{employee.addlDesign}</td>
-                    </tr>
-                ))
-            ) : (
-                !isLoading && (
-                    <tr>
-                        <td colSpan="7" className="no-data-message">
-                            <p>No data available</p>
-                        </td>
-                    </tr>
-                )
-            )}
-        </tbody>
-    </table>
-);
 
+const DataTable = ({ employees, isLoading, onRowClick }) => {
+    
+    
+
+    return (
+        <table className="empTable">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Title</th>
+                    <th>Designation</th>
+                    <th>Office Room</th>
+                    <th>Lab Name</th>
+                    <th>Additional Designation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {employees.length > 0 ? (
+                    employees.map((employee, index) => (
+                        <tr key={index} onDoubleClick={() => onRowClick(employee.id)}>
+                            <td>{employee.empFirstName}</td>
+                            <td>{employee.empLastName}</td>
+                            <td>{employee.empTitle}</td>
+                            <td>{employee.designShortName}</td>
+                            <td>{employee.officeRoomNo}</td>
+                            <td>{employee.labFullName}</td>
+                            <td>{employee.addlDesign}</td>
+                        </tr>
+                    ))
+                ) : (
+                    !isLoading && (
+                        <tr>
+                            <td colSpan="7" className="no-data-message">
+                                <p>No data available</p>
+                            </td>
+                        </tr>
+                    )
+                )}
+            </tbody>
+        </table>
+    );
+
+}
 export default EmployeeList;

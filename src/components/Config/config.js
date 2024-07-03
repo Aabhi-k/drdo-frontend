@@ -5,6 +5,8 @@ const baseDropdownURL = `${baseSpringURL}/dropdown`;
 // Getting data
 // Employee's URL
 const empMasterURL = "/emp/list";
+const empDetailsURL = `${empMasterURL}/details`;
+
 const empDesignationURL = "/emp/designation";
 
 // Lab's URL
@@ -25,20 +27,23 @@ export const labClusterDropDownSearchURL = `${baseDropdownURL}/lab/cluster/searc
 export const cityDropDownSearchURL = `${baseDropdownURL}/city/search`;
 export const empDesignationDropDownSearchURL = `${baseDropdownURL}/emp/designation/search`;
 export const empRoleDropDownSearchURL = `${baseDropdownURL}/emp/role/search`;
+export const zipcodeDropDownSearchURL = `${baseDropdownURL}/zipcode/search`;
 
 // Insertion
 // Employee's URL
 const createEmpMasterURL = `${empMasterURL}`;
 const createEmpDesignationURL = `${empDesignationURL}`;
-
+const createEmpAddressURL = `${baseSpringURL}/address`;
 // Lab's URL
 const createLabMasterURL = `${labMasterURL}`;
+const createLabAddressURL = `${baseSpringURL}/address`;
 
 // Login
 const loginUserURL = `${baseSpringURL}/auth/login`;
 
 export default {
     empMasterURL,
+    empDetailsURL,
     empDesignationURL,
     labMasterURL,
     empMasterSearchURL,
@@ -48,5 +53,7 @@ export default {
     createEmpMasterURL,
     createEmpDesignationURL,
     createLabMasterURL,
-    loginUserURL
+    loginUserURL,
+    createEmpAddressURL,
+    createLabAddressURL,
 };

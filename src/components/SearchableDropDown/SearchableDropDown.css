@@ -1,94 +1,132 @@
 .searchable-dropdown {
-    width: 100%;
-    position: relative;
-    display: inline-block;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.searchable-dropdown input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.searchable-dropdown input:focus {
+  border-color: #66afe9;
+}
+
+.searchable-dropdown .options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.searchable-dropdown .options-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+
+  &:hover {
+    background-color: #f5f5f5;
   }
-  
-  .searchable-dropdown input {
-    padding: 10px; /* Consistent padding throughout */
-    border: 1px solid #ccc;
-    border-radius: 5px; /* Reduced corner radius for a sleeker look */
-    font-size: 16px;
-    outline: none; /* Remove default outline */
+}
+
+.searchable-dropdown.list-error input {
+  color: red;
+  border-color: red;
+}
+
+.searchable-dropdown {
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.searchable-dropdown input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  font-size: 16px;
+  outline: none;
+  width: 90%;
+}
+
+.searchable-dropdown input:focus {
+  border-color: #66afe9;
+}
+
+.searchable-dropdown .options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.searchable-dropdown .options-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+
+  &:hover {
+    background-color: #f5f5f5;
   }
-  
-  .searchable-dropdown input:focus {
-    border-color: #66afe9; /* Consistent focus color */
-  }
-  
-  .searchable-dropdown .options-list {
-    position: absolute;
-    top: 100%; /* Maintain positioning relative to input */
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    list-style: none;
-    padding: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  
-  .searchable-dropdown .options-list li {
-    padding: 10px; /* Consistent padding throughout */
-    cursor: pointer;
-    border-bottom: 1px solid #ddd; /* Lighter border color */
-    &:hover {
-      background-color: #f5f5f5; /* Lighter hover color */
-    }
-  }
-  
-  .searchable-dropdown.list-error input {
-    color: red;
-    border-color: red;
-  }
-  .searchable-dropdown {
-    width: 100%;
-    position: relative;
-    display: inline-block;
-  }
-  
-  .searchable-dropdown input {
-    padding: 10px; 
-    border: 1px solid #ccc;
-    border-radius:15px; 
-    font-size: 16px;
-    outline: none; 
-    width: 90%;
-  }
-  
-  .searchable-dropdown input:focus {
-    border-color: #66afe9;
-  }
-  
-  .searchable-dropdown .options-list {
-    position: absolute;
-    top: 100%; 
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    list-style: none;
-    padding: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  
-  .searchable-dropdown .options-list li {
-    padding: 10px; 
-    cursor: pointer;
-    border-bottom: 1px solid #ddd; 
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  }
-  
-  .searchable-dropdown.list-error input {
-    color: red;
-    border-color: red;
-  }
-    
+}
+
+.searchable-dropdown.list-error input {
+  color: red;
+  border-color: red;
+}
+
+.input-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-container input {
+  width: calc(100% - 30px);
+  /* Adjust if there's an icon inside the input */
+  padding-right: 30px;
+  /* Adjust based on the size of your icon to prevent text from being hidden under the icon */
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 10px;
+  /* Adjust based on your preference */
+  pointer-events: none;
+  /* Prevents the icon from capturing clicks, which allows the input to still be focused */
+}
+
+
+.searchable-dropdown input,
+.searchable-dropdown .options-list {
+  width: 100%;
+  /* Match width of the input and options list */
+  box-sizing: border-box;
+  /* Include padding and border in the element's total width */
+}
+
+.searchable-dropdown .options-list {
+  width: calc(100% - 2px);
+  /* Adjust based on border of the options list if any */
+  box-sizing: border-box;
+}

@@ -61,6 +61,7 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
 
     return (
         <div className={`searchable-dropdown ${isError ? 'list-error' : ''}`}>
+           <div className="input-icon-container">
             <input
                 type="text"
                 placeholder={placeholder}
@@ -68,6 +69,8 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
             />
+            <div className="dropdown-icon">▼</div> 
+        </div>
             {searchTerm && options.length > 0 && (
                 <ul className="options-list">
                     {options.map((option) => (

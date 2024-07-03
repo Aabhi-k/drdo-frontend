@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
+
+import { checkTokenExpiration, setAuthToken, getRoleFromToken } from './services/login';
+
 import PrivateRoute from './components/PrivateRouter/PrivateRouter';
 import SideBar from './components/SideBar/SideBar';
-
 import EmployeeList from './components/EmployeeData/EmpMaster/EmployeeList';
 import EmployeeDesignation from './components/EmployeeData/EmpDesignation/EmployeeDesignation';
 import LabList from './components/LabData/LabList';
 import CreateEmpList from './components/EmployeeData/EmpMaster/CreateEmpList';
 import UserLogin from './components/UserLogin/UserLogin';
-import { checkTokenExpiration, setAuthToken, getRoleFromToken } from './services/login';
+import CreateLabList from './components/LabData/CreateLabList';
+import EmployeeDetails from './components/EmployeeData/EmployeeDetails/EmployeeDetails';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,9 +30,6 @@ function App() {
             setIsSuperAdmin(roles.includes("SUPER ADMIN"))            
         } else {
             setIsAuthenticated(false);
-        }
-        if(isSuperAdmin){
-            console.log("super admin")
         }
     }, []);
 
@@ -57,7 +58,10 @@ function App() {
                             <Route path="/employee/create" element={<CreateEmpList />} />
                             <Route path="/employee/designation" element={<EmployeeDesignation />} />
                             <Route path="/lab" element={<LabList />} />
-                            {/* <Route path="/lab/create" element=Lab Create Component /> */}
+                            <Route path="/lab/create" element={<CreateLabList />} />
+                            <Route path="/employee/details/:id" element={<EmployeeDetails />} />
+                            {/* {isSuperAdmin && <Route path="/admin" element={<AdminPanel />} />} */}
+                  
                         </Route>
 
                         <Route path="*" element={isAuthenticated ? <Navigate to="/employee" /> : <Navigate to="/login" />} />

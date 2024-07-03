@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import SearchableDropDown from "../../SearchableDropDown/SearchableDropDown";
-import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL } from "../../Config/config";
+import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL, zipcodeDropDownSearchURL, cityDropDownSearchURL } from "../../Config/config";
 import "./CreateEmpList.css";
 import Heading from "../../Heading/Heading";
-import { createEmpMaster } from "../../../services/EmployeeList";
+import { createEmpMaster, createEmpAddress } from "../../../services/EmployeeList";
 
 const initialEmployeeData = {
     empTitle: '',
@@ -16,9 +16,20 @@ const initialEmployeeData = {
     empRoleId: '',
     addlDesign: '',
 };
+const initialAddressData = {
+    addressLine1: '',
+    addressLine2: '',
+    addressLine3: '',
+    cityId: '',
+    zipcodeId: '',
+    empId: '',
+}
 
 const CreateEmpList = () => {
+
     const [newEmployeeData, setNewEmployeeData] = useState(initialEmployeeData);
+    const [newAddressData, setNewAddressData] = useState(initialAddressData);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const [submissionError, setSubmissionError] = useState('');
@@ -32,8 +43,16 @@ const CreateEmpList = () => {
             setIsSubmitting(true);
             setSubmissionError('');
             try {
-                await createEmpMaster(newEmployeeData);
+                let id = await createEmpMaster(newEmployeeData);
                 setNewEmployeeData(initialEmployeeData);
+
+                console.log(id);
+                const updatedAddressData = { ...newAddressData, empId: id };
+                setNewAddressData(updatedAddressData);
+
+                console.log(newEmployeeData);
+                console.log(updatedAddressData);
+                await createEmpAddress(updatedAddressData);
             } catch (error) {
                 setSubmissionError(error.message);
             } finally {
@@ -42,17 +61,25 @@ const CreateEmpList = () => {
         }
     };
 
-    const handleChange = (e) => {
+    const handleEmpChange = (e) => {
         const { name, value } = e.target;
         setNewEmployeeData(prevState => ({
             ...prevState,
             [name]: value,
         }));
     };
+
+    const hanldeAddressChange = (e) => {
+        const { name, value } = e.target;
+        setNewAddressData(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
     const handleClearFields = () => {
         setNewEmployeeData(initialEmployeeData);
-        setErrors({}); // Optionally clear validation errors as well
-        setSubmissionError(''); // Clear any submission errors if needed
+        setErrors({});
+        setSubmissionError('');
     };
 
 
@@ -102,6 +129,21 @@ const CreateEmpList = () => {
             validationErrors.empRoleId = 'Employee Role is required.';
         }
 
+        if (newAddressData.addressLine1.trim() === '') {
+            validationErrors.addressLine1 = 'Address Line 1 is required.';
+        }
+        if (!newAddressData.addressLine2.trim()) {
+            validationErrors.addressLine2 = 'Address Line 2 is required.';
+        }
+        if (!newAddressData.cityId) {
+            validationErrors.cityId = 'City is required.';
+        }
+        if (!newAddressData.zipcodeId) {
+            validationErrors.zipcodeId = 'Zip Code is required.';
+        } else if (!/^\d{6}$/.test(newAddressData.zipCode)) {
+            validationErrors.zipcodeId = 'Zip Code must be a 6-digit number.';
+        }
+
         return validationErrors;
     };
 
@@ -122,9 +164,9 @@ const CreateEmpList = () => {
                         type="text"
                         id="empFirstName"
                         name="empFirstName"
-                        placeholder="First Name"
+                        placeholder="Enter First Name"
                         value={newEmployeeData.empFirstName}
-                        onChange={handleChange}
+                        onChange={handleEmpChange}
                     />
                     {errors.empFirstName && <span className="error">{errors.empFirstName}</span>}
                 </div>
@@ -134,9 +176,9 @@ const CreateEmpList = () => {
                         type="text"
                         id="empMiddleName"
                         name="empMiddleName"
-                        placeholder="Middle Name"
+                        placeholder="Enter Middle Name"
                         value={newEmployeeData.empMiddleName}
-                        onChange={handleChange}
+                        onChange={handleEmpChange}
                     />
                     {errors.empMiddleName && <span className="error">{errors.empMiddleName}</span>}
                 </div>
@@ -146,9 +188,9 @@ const CreateEmpList = () => {
                         type="text"
                         id="empLastName"
                         name="empLastName"
-                        placeholder="Last Name"
+                        placeholder="Enter Last Name"
                         value={newEmployeeData.empLastName}
-                        onChange={handleChange}
+                        onChange={handleEmpChange}
                     />
                     {errors.empLastName && <span className="error">{errors.empLastName}</span>}
                 </div>
@@ -158,22 +200,22 @@ const CreateEmpList = () => {
                         type="text"
                         id="empTitle"
                         name="empTitle"
-                        placeholder="Title"
+                        placeholder="Enter Title"
                         value={newEmployeeData.empTitle}
-                        onChange={handleChange}
+                        onChange={handleEmpChange}
                     />
                     {errors.empTitle && <span className="error">{errors.empTitle}</span>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="empDesignId">Designation</label>
                     <SearchableDropDown
-                        placeholder="Designation"
+                        placeholder="Select Designation"
                         url={empDesignationDropDownSearchURL}
                         name="empDesignId"
-                        onChange={handleChange}
-                        onError={(error) => handleDropdownError('empDesignId', error)}
+                        onChange={handleEmpChange}
+                        onError={(error) => handleDropdownError('Designation', error)}
                     />
-                    {errors.empDesignId && <span className="error">{errors.empDesignId}</span>}
+                    {errors.Designation && <span className="error">{errors.Designation}</span>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="officeRoomNo">Office Room</label>
@@ -181,33 +223,33 @@ const CreateEmpList = () => {
                         type="text"
                         id="officeRoomNo"
                         name="officeRoomNo"
-                        placeholder="Office Room"
+                        placeholder="Enter Office Room"
                         value={newEmployeeData.officeRoomNo}
-                        onChange={handleChange}
+                        onChange={handleEmpChange}
                     />
                     {errors.officeRoomNo && <span className="error">{errors.officeRoomNo}</span>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="labId">Lab Name</label>
                     <SearchableDropDown
-                        placeholder="Lab Name"
+                        placeholder="Select Lab Name"
                         url={labMasterDropDownSearchURL}
                         name="labId"
-                        onChange={handleChange}
-                        onError={(error) => handleDropdownError('labId', error)}
+                        onChange={handleEmpChange}
+                        onError={(error) => handleDropdownError('Lab', error)}
                     />
-                    {errors.labId && <span className="error">{errors.labId}</span>}
+                    {errors.Lab && <span className="error">{errors.Lab}</span>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="empRoleId">Employee Role</label>
                     <SearchableDropDown
-                        placeholder="Employee Role"
+                        placeholder="Select Employee Role"
                         url={empRoleDropDownSearchURL}
                         name="empRoleId"
-                        onChange={handleChange}
-                        onError={(error) => handleDropdownError('empRoleId', error)}
+                        onChange={handleEmpChange}
+                        onError={(error) => handleDropdownError('Role', error)}
                     />
-                    {errors.empRoleId && <span className="error">{errors.empRoleId}</span>}
+                    {errors.Role && <span className="error">{errors.Role}</span>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="addlDesign">Additional Designation</label>
@@ -215,10 +257,70 @@ const CreateEmpList = () => {
                         type="text"
                         id="addlDesign"
                         name="addlDesign"
-                        placeholder="Additional Designation"
+                        placeholder="Enter Additional Designation"
                         value={newEmployeeData.addlDesign}
-                        onChange={handleChange}
+                        onChange={handleEmpChange}
                     />
+                </div>
+            </div>
+            <div className="form-fields">
+                <div className="form-group">
+                    <label htmlFor="addressLine1">Address Line 1</label>
+                    <input
+                        type="text"
+                        id="addressLine1"
+                        name="addressLine1"
+                        placeholder="Enter Address Line 1"
+                        value={newAddressData.addressLine1}
+                        onChange={hanldeAddressChange}
+                    />
+                    {errors.addressLine1 && <span className="error">{errors.addressLine1}</span>}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="addressLine2">Address Line 2</label>
+                    <input
+                        type="text"
+                        id="addressLine2"
+                        name="addressLine2"
+                        placeholder="Enter Address Line 2"
+                        value={newAddressData.addressLine2}
+                        onChange={hanldeAddressChange}
+                    />
+                    {errors.addressLine2 && <span className="error">{errors.addressLine2}</span>}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="addressLine3">Address Line 3</label>
+                    <input
+                        type="text"
+                        id="addressLine3"
+                        name="addressLine3"
+                        placeholder="Enter Address Line 3"
+                        value={newAddressData.addressLine3}
+                        onChange={hanldeAddressChange}
+                    />
+                    {errors.addressLine3 && <span className="error">{errors.addressLine3}</span>}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="cityId">City</label>
+                    <SearchableDropDown
+                        placeholder="Select City"
+                        url={cityDropDownSearchURL}
+                        name="cityId"
+                        onChange={hanldeAddressChange}
+                        onError={(error) => handleDropdownError('City', error)}
+                    />
+                    {errors.City && <span className="error">{errors.City}</span>}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="zipcodeId">Zipcode</label>
+                    <SearchableDropDown
+                        placeholder="Select Zipcode"
+                        url={zipcodeDropDownSearchURL}
+                        name="zipcodeId"
+                        onChange={hanldeAddressChange}
+                        onError={(error) => handleDropdownError('Zipcode', error)}
+                    />
+                    {errors.Zipcode && <span className="error">{errors.Zipcode}</span>}
                 </div>
             </div>
             <div className="form-actions">
@@ -232,8 +334,7 @@ const CreateEmpList = () => {
             {submissionError && <span className="error">{submissionError}</span>}
         </form>
     );
-
-
 }
 
 export default CreateEmpList;
+

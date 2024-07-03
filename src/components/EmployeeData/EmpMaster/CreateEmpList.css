@@ -16,6 +16,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group {

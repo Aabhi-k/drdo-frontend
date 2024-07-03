@@ -93,6 +93,38 @@ export const createEmpMaster = async (employeeData) => {
     }
 };
 
+export const createLabMaster = async (labData) => {
+    try {
+        const response = await api.post(config.createLabMasterURL, labData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating lab master:', error);
+        throw error;
+    }
+};
+
+export const createLabAddress = async (addressData) => {
+    try {
+        const response = await api.post(config.createLabAddressURL, addressData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating lab address:', error);
+        throw error;
+    }
+}
+
+
+// Create Employee Address
+export const createEmpAddress = async (addressData) => {
+    try {
+        const response = await api.post(config.createEmpAddressURL, addressData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating employee address:', error);
+        throw error;
+    }
+};
+
 export const dropdownSearch = async (url, searchTerm) => {
     try {
         const response = await api.get(url, {
@@ -105,4 +137,14 @@ export const dropdownSearch = async (url, searchTerm) => {
     }
 };
 
+
+export const getEmployeeDetails = async (id) => {
+    try {
+        const response = await api.get(`${config.empDetailsURL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching employee details:', error);
+        throw error;
+    }
+}
 
