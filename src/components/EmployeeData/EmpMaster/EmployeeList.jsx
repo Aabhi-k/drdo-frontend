@@ -66,6 +66,7 @@ const EmployeeList = () => {
 
     const handleCreateEmployee = () => navigate('/employee/create');
     const handleEditEmployee = () => navigate('/employee/edit');
+    const handleEmpDesignation = () => navigate('/employee/designation');
     const toggleDropdown = () => setIsOpen(prevState => !prevState);
 
     const handleApplyFilter = (filters) => {
@@ -89,7 +90,7 @@ const EmployeeList = () => {
                     </button>
                     <div className={`dropdown-content ${isOpen ? 'show' : ''}`}>
                         <button className="create-btn" onClick={handleCreateEmployee}>Create Employee</button>
-                        <button className="edit-btn" onClick={handleEditEmployee}>Edit Employee</button>
+                        <button className="emp-designation" onClick={handleEmpDesignation}> Employee Designation </button>
                     </div>
                 </div>
             </div>

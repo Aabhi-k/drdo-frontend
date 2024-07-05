@@ -20,6 +20,7 @@ export const loginUser = async (userData) => {
 const api = axios.create({
     baseURL: baseSpringURL,
 });
+api.defaults.headers['Content-Type'] = 'application/json'; // Default header for all api requests
 
 export const setAuthToken = (token) => {
     if (token) {
@@ -47,4 +48,29 @@ export const getRoleFromToken = () => {
     return roles;
 }
 
+// Request Interceptor
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token && !checkTokenExpiration(token)) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+// Response Interceptor
+api.interceptors.response.use((response) => {
+    return response;
+}, (error) => {
+    // Handle 401 Unauthorized
+    if (error.response && error.response.status === 401) {
+        // Perform actions like redirecting to login page
+        console.log('Token expired. Please login again.');
+        // Optionally, clear token from storage
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+    }
+    return Promise.reject(error);
+});
 export default api;

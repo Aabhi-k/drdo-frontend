@@ -1,6 +1,55 @@
-.emp-details{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
+.emp-details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.emp-details-content {
+  width: 80%;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0px 0px 10px 2px rgba(173, 173, 173, 0.75);
+  -moz-box-shadow: 0px 0px 10px 2px rgba(173, 173, 173, 0.75);
+  box-shadow: 0px 0px 10px 2px rgba(173, 173, 173, 0.75);
+}
+
+.emp-details input {
+  background-color: #ffffff;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: end;
+  width: 80%;
+}
+
+.btn-row button {
+  font-size: 16px;
+  border: thin solid;
+  outline: none;
+  color: #ffffff;
+  height: 40px;
+  width: 100px;
+  background-color: #353a59;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-row button:hover {
+  transform: scale(1.05);
+  color: #ffffff;
+  background-color: #5961cd;
+}
+
+.btn-row button:active {
+  transform: scale(0.95);
 }

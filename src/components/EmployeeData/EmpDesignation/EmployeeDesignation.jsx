@@ -5,6 +5,7 @@ import './EmployeeDesignation.css';
 import SearchBar from "../../SearchBar/SearchBar";
 import Pagination from "../../Pagination/Pagination";
 import Heading from "../../Heading/Heading";
+import { useNavigate } from "react-router-dom";
 
 const EmployeeDesignation = () => {
     const [empDesignation, setempDesignation] = useState([]);
@@ -16,6 +17,8 @@ const EmployeeDesignation = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         fetchData(currentPage, recordsPerPage, debouncedSearchTerm);
     }, [currentPage, debouncedSearchTerm]);
@@ -26,11 +29,7 @@ const EmployeeDesignation = () => {
 
         try {
             let result;
-            if (term) {
-                result = await searchEmpDesignation(term, pageNo, sizeNo);
-            } else {
-                result = await getEmpDesignation(pageNo, sizeNo);
-            }
+            result = term ? await searchEmpDesignation(term, pageNo, sizeNo) : await getEmpDesignation(pageNo, sizeNo);
             setempDesignation(result.content);
             setTotalPages(result.totalPages);
         } catch (error) {
@@ -50,25 +49,29 @@ const EmployeeDesignation = () => {
         };
     }, [searchTerm]);
 
+    const onRowClick = (id) => {
+        navigate(`/employee/designation/details/${id}`);
+    }
+
     return (
         <div className="emp-designation">
-            <Heading name={"Employee Designation"} />
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
+            <div className="table-top">
+                <Heading name={"Employee Designation"} />
+                <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage} />
+            </div>
             {error && <p>Error: {error.message}</p>}
-            {empDesignation && empDesignation.length > 0 && (
-                <>
-                    <DataTable employees={empDesignation} />
-                    <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
-                </>
-            )}
-            {!isLoading && !error && empDesignation.length === 0 && <p>No data available</p>}
+
+
+            <DataTable employees={empDesignation} isLoading={isLoading} onRowClick={onRowClick} />
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
+
         </div>
     );
 }
 
 
-const DataTable = ({employees}) => {
-    return(
+const DataTable = ({ employees, isLoading, onRowClick }) => {
+    return (
         <table border="1" cellPadding="5" cellSpacing="5" className="emp-designation-table">
             <thead>
                 <tr>
@@ -78,13 +81,22 @@ const DataTable = ({employees}) => {
                 </tr>
             </thead>
             <tbody>
-                {employees.map((employee, index) => (
-                    <tr key={index}>
-                        <td>{employee.designShortName}</td>
-                        <td>{employee.designFullName}</td>
-                        <td>{employee.cadreShortName}</td>
-                    </tr>
-                ))}
+                {employees.length > 0 ? (
+                    employees.map((employee, index) => (
+                        <tr key={index} onDoubleClick={() => onRowClick(employee.id)}>
+                            <td>{employee.designShortName}</td>
+                            <td>{employee.designFullName}</td>
+                            <td>{employee.cadreShortName}</td>
+                        </tr>
+                    ))) : (
+                    !isLoading && (
+                        <tr>
+                            <td colSpan="3" className="no-data-message">
+                                <p>No data available</p>
+                            </td>
+                        </tr>
+                    )
+                )}
             </tbody>
         </table>
     );

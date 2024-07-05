@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import "./CreateEmpList.css";
+import React, { useEffect, useState } from 'react';
 
 import SearchableDropDown from "../../SearchableDropDown/SearchableDropDown";
 import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL, zipcodeDropDownSearchURL, cityDropDownSearchURL, telephoneCategoryDropDownSearchURL } from "../../Config/config";
+import { empDesignationDisplayURL, empRoleDisplayURL, cityDisplayURL, telephoneCategoryDisplayURL, zipcodeDisplayURL, labMasterDisplayURL } from "../../Config/config";
 import Heading from "../../Heading/Heading";
-import { createEmpMaster, createEmpAddress, createEmpTelephone } from "../../../services/EmployeeList";
+import { useParams, useNavigate } from 'react-router-dom';
+import { editEmpAddress, editEmpMaster, editEmpTelephone, getEmployeeAddress, getEmployeeEditDetails, getEmployeeTelephone } from "../../../services/EmployeeList";
 
 const initialEmployeeData = {
     empTitle: '',
@@ -25,15 +26,14 @@ const initialAddressData = {
     zipcodeId: '',
     empId: '',
 }
-const initialTelephoneData = [{
+const initialTelephoneData = {
     telephoneNumber: '',
     teleCatId: '',
     empId: '',
     epabx: '',
-}]
+}
 
-const CreateEmpList = () => {
-
+const EditEmployee = () => {
     const [newEmployeeData, setNewEmployeeData] = useState(initialEmployeeData);
     const [newAddressData, setNewAddressData] = useState(initialAddressData);
     const [newTelephoneData, setNewTelephoneData] = useState(initialTelephoneData);
@@ -42,7 +42,32 @@ const CreateEmpList = () => {
     const [errors, setErrors] = useState({});
     const [submissionError, setSubmissionError] = useState('');
 
-    const handleCreateEmployee = async (e) => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchEmployeeDetails(id);
+
+    }, [id]);
+
+    const fetchEmployeeDetails = async (employeeId) => {
+       try{
+        // Fetching Employee Details
+        const empResult = await getEmployeeEditDetails(employeeId);
+        setNewEmployeeData({ ...initialEmployeeData, ...empResult });
+        const addressResult = await getEmployeeAddress(employeeId);
+        setNewAddressData({ ...initialAddressData, ...addressResult });
+        const telephoneResult = await getEmployeeTelephone(employeeId);
+        setNewTelephoneData({ ...initialTelephoneData, ...telephoneResult });
+
+        }catch (error) {
+            console.error('Error fetching Employee details:', error);
+            throw error;
+        }
+    
+    }
+
+    const handleEditEmployee = async (e) => {
         e.preventDefault();
         const validationErrors = validateForm();
         setErrors(validationErrors);
@@ -51,23 +76,13 @@ const CreateEmpList = () => {
             setIsSubmitting(true);
             setSubmissionError('');
             try {
-                // Posting Employee Data
-                console.log(newEmployeeData);
-                let id = await createEmpMaster(newEmployeeData);
-                setNewEmployeeData(initialEmployeeData);
+                // Putting Employee Details
+                await editEmpMaster(id, newEmployeeData);
+                await editEmpAddress(id, newAddressData);
+                await editEmpTelephone(id, newTelephoneData);
+                alert('Employee details updated successfully.');
 
-                // Posting Address Data
-                const updatedAddressData = { ...newAddressData, empId: id };
-                setNewAddressData(updatedAddressData);
-                console.log(newAddressData);
-                await createEmpAddress(updatedAddressData);
-
-                // Posting Telephone Data
-                const updatedTelephoneData = { ...newTelephoneData, empId: id };
-                setNewTelephoneData(updatedTelephoneData);
-                console.log(newTelephoneData);
-                await createEmpTelephone(updatedTelephoneData);
-
+                setIsSubmitting(false);
 
             } catch (error) {
                 setSubmissionError(error.message);
@@ -92,20 +107,17 @@ const CreateEmpList = () => {
             [name]: value,
         }));
     };
-    const handleTelephoneChange = (index, e) => {
+    const hanldeTelephoneChange = (e) => {
         const { name, value } = e.target;
-        const updatedTelephones = newTelephoneData.map((tel, i) => {
-            if (i === index) {
-                return { ...tel, [name]: value };
-            }
-            return tel;
-        });
-        setNewTelephoneData(updatedTelephones);
+        setNewTelephoneData(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
     };
-    const handleClearFields = () => {
-        setNewEmployeeData(initialEmployeeData);
+    const handleExit = () => {
         setErrors({});
         setSubmissionError('');
+        navigate('/employee');
     };
 
 
@@ -179,8 +191,8 @@ const CreateEmpList = () => {
     };
 
     return (
-        <form onSubmit={handleCreateEmployee} className="create-emp">
-            <Heading name={"Create Employee"} />
+        <form onSubmit={handleEditEmployee} className="create-emp">
+            <Heading name={"Edit"} />
             {/* Employee Details Fields  */}
             <div className="form-fields">
                 <div className="form-group">
@@ -239,6 +251,9 @@ const CreateEmpList = () => {
                         name="empDesignId"
                         onChange={handleEmpChange}
                         onError={(error) => handleDropdownError('Designation', error)}
+                        initialValue={newEmployeeData.empDesignId}
+                        displayURL={empDesignationDisplayURL}
+                        
                     />
                     {errors.Designation && <span className="error">{errors.Designation}</span>}
                 </div>
@@ -262,6 +277,8 @@ const CreateEmpList = () => {
                         name="labId"
                         onChange={handleEmpChange}
                         onError={(error) => handleDropdownError('Lab', error)}
+                        initialValue={newEmployeeData.labId}
+                        displayURL={labMasterDisplayURL}
                     />
                     {errors.Lab && <span className="error">{errors.Lab}</span>}
                 </div>
@@ -273,6 +290,8 @@ const CreateEmpList = () => {
                         name="empRoleId"
                         onChange={handleEmpChange}
                         onError={(error) => handleDropdownError('Role', error)}
+                        initialValue={newEmployeeData.empRoleId}
+                        displayURL={empRoleDisplayURL}
                     />
                     {errors.Role && <span className="error">{errors.Role}</span>}
                 </div>
@@ -298,7 +317,7 @@ const CreateEmpList = () => {
                         name="telephoneNumber"
                         placeholder="Enter Telephone Number"
                         value={newTelephoneData.telephoneNumber}
-                        onChange={handleTelephoneChange}
+                        onChange={hanldeTelephoneChange}
                     />
                     {errors.telephoneNumber && <span className="error">{errors.telephoneNumber}</span>}
                 </div>
@@ -308,8 +327,10 @@ const CreateEmpList = () => {
                         placeholder="Select Telephone Category"
                         url={telephoneCategoryDropDownSearchURL}
                         name="teleCatId"
-                        onChange={handleTelephoneChange}
+                        onChange={hanldeTelephoneChange}
                         onError={(error) => handleDropdownError('Telephone Category', error)}
+                        initialValue={newTelephoneData.teleCatId}
+                        displayURL={telephoneCategoryDisplayURL}
                     />
                     {errors.TelephoneCategory && <span className="error">{errors.TelephoneCategory}</span>}
                 </div>
@@ -321,7 +342,7 @@ const CreateEmpList = () => {
                         name="epabx"
                         placeholder="Enter EPABX"
                         value={newTelephoneData.epabx}
-                        onChange={handleTelephoneChange}
+                        onChange={hanldeTelephoneChange}
                     />
                     {errors.epabx && <span className="error">{errors.epabx}</span>}
                 </div>
@@ -372,6 +393,8 @@ const CreateEmpList = () => {
                         name="cityId"
                         onChange={hanldeAddressChange}
                         onError={(error) => handleDropdownError('City', error)}
+                        initialValue={newAddressData.cityId}
+                        displayURL={cityDisplayURL}
                     />
                     {errors.City && <span className="error">{errors.City}</span>}
                 </div>
@@ -383,22 +406,26 @@ const CreateEmpList = () => {
                         name="zipcodeId"
                         onChange={hanldeAddressChange}
                         onError={(error) => handleDropdownError('Zipcode', error)}
+                        initialValue={newAddressData.zipcodeId}
+                        displayURL={zipcodeDisplayURL}
                     />
+
+
+                    
                     {errors.Zipcode && <span className="error">{errors.Zipcode}</span>}
                 </div>
             </div>
             <div className="form-actions">
                 <button className="submit-emp-btn" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Creating...' : 'Create Employee'}
+                    {isSubmitting ? 'Saving...' : 'Save Employee'}
                 </button>
-                <button type="button" className="clear-btn" onClick={handleClearFields}>
-                    Clear
+                <button type="button" className="clear-btn" onClick={handleExit}>
+                    Exit
                 </button>
             </div>
             {submissionError && <span className="error">{submissionError}</span>}
         </form>
     );
-}
+};
 
-export default CreateEmpList;
-
+export default EditEmployee;

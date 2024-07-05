@@ -1,15 +1,37 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import './SearchableDropDown.css';
-import { dropdownSearch } from "../../services/EmployeeList";
+import { dropdownSearch, getDropdownDisplay } from "../../services/EmployeeList";
 
-const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
+const SearchableDropDown = ({ placeholder, url, name, onChange, onError, initialValue, displayURL }) => {
     const [options, setOptions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [displayValue, setDisplayValue] = useState('');
     const [isError, setIsError] = useState(false);
     const debounceTimeoutRef = useRef(null);
     const isSelectingRef = useRef(false);
+
+    useEffect(() => {
+        if (initialValue && displayURL) {
+            const fetchDisplayValue = async () => {
+                try {
+                    const response = await getDropdownDisplay(displayURL, initialValue);
+                    if (response) {
+                        setDisplayValue(response.name);
+                    } else {
+
+                        console.warn(`Initial value '${initialValue}' not found.`);
+                        setDisplayValue('');
+                    }
+                } catch (error) {
+                    console.error("Error fetching display value:", error);
+
+                    setDisplayValue('');
+                }
+            };
+            fetchDisplayValue();    
+        }
+    }, [initialValue]);
 
     useEffect(() => {
         if (searchTerm) {
@@ -37,11 +59,11 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
     const handleOptionSelect = (option) => {
         isSelectingRef.current = true;
         setIsError(false);
-        onError(false); 
+        onError(false);
         setDisplayValue(option.name);
         onChange({ target: { name, value: option.id, label: option.name } });
         setSearchTerm('');
-        setOptions([]); 
+        setOptions([]);
         setTimeout(() => {
             isSelectingRef.current = false;
         }, 0);
@@ -61,16 +83,16 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError }) => {
 
     return (
         <div className={`searchable-dropdown ${isError ? 'list-error' : ''}`}>
-           <div className="input-icon-container">
-            <input
-                type="text"
-                placeholder={placeholder}
-                value={displayValue}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-            />
-            <div className="dropdown-icon">▼</div> 
-        </div>
+            <div className="input-icon-container">
+                <input
+                    type="text"
+                    placeholder={placeholder}
+                    value={displayValue}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                />
+                <div className="dropdown-icon">▼</div>
+            </div>
             {searchTerm && options.length > 0 && (
                 <ul className="options-list">
                     {options.map((option) => (

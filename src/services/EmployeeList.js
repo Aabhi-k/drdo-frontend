@@ -1,6 +1,4 @@
-import axios from 'axios';
 import config from '../components/Config/config';
-import { baseSpringURL } from '../components/Config/config';
 import api from './login';
 
 // Helper function to build query strings from filters
@@ -82,6 +80,17 @@ export const searchLabMaster = async (searchTerm, filters, pageNo, sizeNo) => {
     }
 };
 
+// Create Employee Telephone
+export const createEmpTelephone = async (telephoneData) => {
+    try {
+        const response = await api.post(config.createEmpTelephoneURL, telephoneData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating employee telephone:', error);
+        throw error;
+    }
+}
+
 // Create Employee Master
 export const createEmpMaster = async (employeeData) => {
     try {
@@ -137,6 +146,16 @@ export const dropdownSearch = async (url, searchTerm) => {
     }
 };
 
+export const getDropdownDisplay = async (displayURL, initialValue) => {
+    try {
+        const response = await api.get(`${displayURL}/${initialValue}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching display value:", error);
+        throw error;
+    }
+
+}
 
 export const getEmployeeDetails = async (id) => {
     try {
@@ -147,4 +166,80 @@ export const getEmployeeDetails = async (id) => {
         throw error;
     }
 }
+export const getAddressDetails = async (id) => {
+    try {
+        const response = await api.get(`${config.empAddressDetailsURL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching address details:', error);
+        throw error;
+    }
+}
+
+export const getEmployeeEditDetails = async (id) => {
+    try {
+        const response = await api.get(`${config.getEmpDetailsURL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching employee edit details:', error);
+        throw error;
+    }
+}
+
+export const getEmployeeAddress = async (id) => {
+    try {
+        const response = await api.get(`${config.getEmpAddressURL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching employee address:', error);
+        throw error;
+    }
+}
+
+export const getEmployeeTelephone = async (id) => {
+    try {
+        const response = await api.get(`${config.getEmpTelephoneURL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching employee telephone:', error);
+        throw error;
+    }
+}
+
+// Edit Employee Master
+export const editEmpMaster = async (id, employeeData) => {
+    try {
+        const response = await api.put(`${config.editEmpMasterURL}/${id}`, employeeData);
+        return response.data;
+    } catch (error) {
+        console.error('Error editing employee master:', error);
+        throw error;
+    }
+}
+
+// Edit Employee Address
+
+export const editEmpAddress = async (id, addressData) => {
+    try {
+        const response = await api.put(`${config.editEmpAddressURL}/${id}`, addressData);
+        return response.data;
+    } catch (error) {
+        console.error('Error editing employee address:', error);
+        throw error;
+    }
+}
+
+// Edit Employee Telephone
+export const editEmpTelephone = async (id, telephoneData) => {
+    try {
+        const response = await api.put(`${config.editEmpTelephoneURL}/${id}`, telephoneData);
+        return response.data;
+    } catch (error) {
+        console.error('Error editing employee telephone:', error);
+        throw error;
+    }
+}
+
+
+
 
