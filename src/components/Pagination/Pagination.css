@@ -1,24 +1,49 @@
-.page-system{    
+.page-system {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.pre-btn, .next-btn{
-    margin: 10px;
-    padding: 10px;
-    width: 80px;
+.pre-btn,
+.next-btn {
+    padding: 10px 20px;
+    /* Increased padding for better visual appearance */
+    width: auto;
+    /* Adjust width to content */
     border: none;
     border-radius: 10px;
     outline: none;
-    background-color: #e6e6e6;
-    transition: 0.2s;
+    background-color: #353a59;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    transition: all 0.3s ease;
 }
 
-.pre-btn:hover, .next-btn:hover{
-    transform: scale(1.1);
+.pre-btn:hover,
+.next-btn:hover,
+.pre-btn:focus,
+.next-btn:focus {
+    background-color: #5961cd;
+    /* Darker shade for hover/focus */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Increased shadow for hover/focus */
+    transform: translateY(-2px);
+    /* Slight lift effect */
 }
 
-.pre-btn:active, .next-btn:active{
-    transform: scale(0.9);
+.pre-btn:disabled,
+.next-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    color: #6b6b6b;
+}
+
+.pre-btn:active,
+.next-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

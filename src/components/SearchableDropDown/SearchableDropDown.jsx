@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import './SearchableDropDown.css';
 import { dropdownSearch, getDropdownDisplay } from "../../services/EmployeeList";
 
@@ -36,7 +35,7 @@ const SearchableDropDown = ({ placeholder, url, name, onChange, onError, initial
     useEffect(() => {
         if (searchTerm) {
             const fetchOptions = async () => {
-
+                
                 const response = await dropdownSearch(url, searchTerm);
                 setOptions(response);
             };

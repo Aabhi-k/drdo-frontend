@@ -4,6 +4,9 @@ import Heading from '../../Heading/Heading';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getEmployeeDetails } from '../../../services/EmployeeList';
 
+
+// NEEDS UPDATION TO HANDLE ARRAY VALUES
+
 const empDetails = {
     empTitle: '',
     empFirstName: '',
@@ -13,13 +16,20 @@ const empDetails = {
     officeRoomNo: '',
     labFullName: '',
     addlDesign: '',
-    telephoneNumber: '',
-    telephoneCategory: '',
+    telephone: [{
+        telephoneNumber: '',
+        telephoneCategory: '',
+    }],
+
     addressLine1: '',
     addressLine2: '',
     addressLine3: '',
     cityFullName: '',
     zipcode: '',
+    mail: [{
+        mailCategory: '',
+        email: '',
+    }]
 }
 const EmployeeDetails = () => {
     const [employee, setEmployee] = useState(empDetails);
@@ -35,16 +45,15 @@ const EmployeeDetails = () => {
         const empResult = await getEmployeeDetails(employeeId);
         setEmployee({ ...empDetails, ...empResult });
     }
-    const editEmployee = () => {
-        navigate(`/employee/edit/${id}`);
-        console.log('edit employee' + id);
-    }
+    const editEmployee = () => navigate(`/employee/edit/${id}`);
+    const back = () => navigate('/employee');
 
     return (
         <div className='emp-details'>
             <Heading name="Details" />
             <div className="btn-row">
-                <button className='edit-btn' onClick={editEmployee}>edit</button>
+                <button className='edit-btn' onClick={editEmployee}>Edit</button>
+                <button className="back" onClick={back}>Back</button>
             </div>
             <div className='emp-details-content'>
                 <div className="form-group">
@@ -136,32 +145,60 @@ const EmployeeDetails = () => {
                     />
                 </div>
             </div>
-            <div className="emp-details-content">
 
-                <div className="form-group">
-                    <label htmlFor="telephoneNumber">Telephone Number</label>
-                    <input
-                        type="text"
-                        id="telephoneNumber"
-                        name="telephoneNumber"
-                        placeholder="Telephone Number"
-                        value={employee.telephoneNumber}
-                        readOnly
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="telephoneCategory">Telephone Category</label>
-                    <input
-                        type="text"
-                        id="telephoneCategory"
-                        name="telephoneCategory"
-                        placeholder="Telephone Category"
-                        value={employee.telephoneCategory}
-                        readOnly
-                    />
 
+            {employee.telephone.map((tel, index) => (
+                <div className="emp-details-content" key={index}>
+                    <div className="form-group">
+                        <label htmlFor={`telephoneNumber-${index}`}>Telephone Number</label>
+                        <input
+                            type="text"
+                            id={`telephoneNumber-${index}`}
+                            name="telephoneNumber"
+                            placeholder="Telephone Number"
+                            value={tel.telephoneNumber}
+                            readOnly
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor={`telephoneCategory-${index}`}>Telephone Category</label>
+                        <input
+                            type="text"
+                            id={`telephoneCategory-${index}`}
+                            name="telephoneCategory"
+                            placeholder="Telephone Category"
+                            value={tel.telephoneCategory}
+                            readOnly
+                        />
+                    </div>
                 </div>
-            </div>
+            ))}
+            {employee.mail.map((mail, index) => (
+                <div className="emp-details-content" key={index}>
+                    <div className="form-group">
+                        <label htmlFor={`email-${index}`}>Email</label>
+                        <input
+                            type="text"
+                            id={`email-${index}`}
+                            name="email"
+                            placeholder="Email"
+                            value={mail.email}
+                            readOnly
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor={`mailCategory-${index}`}>Mail Category</label>
+                        <input
+                            type="text"
+                            id={`mailCategory-${index}`}
+                            name="mailCategory"
+                            placeholder="Mail Category"
+                            value={mail.mailCategory}
+                            readOnly
+                        />
+                    </div>
+                </div>
+            ))}
 
             <div className="emp-details-content">
 

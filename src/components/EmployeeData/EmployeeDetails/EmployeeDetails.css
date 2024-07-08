@@ -29,6 +29,7 @@
   display: flex;
   justify-content: end;
   width: 80%;
+  gap: 20px;
 }
 
 .btn-row button {
@@ -39,7 +40,7 @@
   height: 40px;
   width: 100px;
   background-color: #353a59;
-  border-radius: 10px;
+  border-radius: 15px;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -52,4 +53,14 @@
 
 .btn-row button:active {
   transform: scale(0.95);
+}
+.btn-row .back{
+  font-size: 16px;
+  color: #000;
+  background-color: #ffffff;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
 }

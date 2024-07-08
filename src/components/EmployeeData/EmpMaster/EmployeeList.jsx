@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import './EmployeeList.css';
 import { useNavigate } from 'react-router-dom';
 
-import { getEmpList, searchEmpMaster } from "../../../services/EmployeeList.js";
+import { getEmpList, searchEmpMaster,  } from "../../../services/EmployeeList.js";
 import Pagination from "../../Pagination/Pagination.jsx";
 import SearchBar from "../../SearchBar/SearchBar.jsx";
 import menuBar from "../../../imgs/menu.png";
@@ -45,7 +45,12 @@ const EmployeeList = () => {
             const result = term
                 ? await searchEmpMaster(term, filters, pageNo, sizeNo)
                 : await getEmpList(filters, pageNo, sizeNo);
-
+            
+            if(result.length === 0) {
+                setEmployees([]);
+                setTotalPages(1);
+                return;
+            }
             setEmployees(result.content);
             setTotalPages(result.totalPages);
         } catch (err) {
@@ -57,6 +62,9 @@ const EmployeeList = () => {
     useEffect(() => {
         fetchData(currentPage, recordsPerPage, debouncedSearchTerm, selectedFilters);
     }, [currentPage, debouncedSearchTerm, selectedFilters, fetchData]);
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [selectedFilters, debouncedSearchTerm]);
 
 
     useMemo(() => {
@@ -65,7 +73,6 @@ const EmployeeList = () => {
     }, [searchTerm]);
 
     const handleCreateEmployee = () => navigate('/employee/create');
-    const handleEditEmployee = () => navigate('/employee/edit');
     const handleEmpDesignation = () => navigate('/employee/designation');
     const toggleDropdown = () => setIsOpen(prevState => !prevState);
 

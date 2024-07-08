@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import SearchableDropDown from "../../SearchableDropDown/SearchableDropDown";
 import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL, zipcodeDropDownSearchURL, cityDropDownSearchURL, telephoneCategoryDropDownSearchURL } from "../../Config/config";
-import { empDesignationDisplayURL, empRoleDisplayURL, cityDisplayURL, telephoneCategoryDisplayURL, zipcodeDisplayURL, labMasterDisplayURL } from "../../Config/config";
+import { empDesignationDisplayURL, empRoleDisplayURL, cityDisplayURL, telephoneCategoryDisplayURL, zipcodeDisplayURL, labMasterDisplayURL, empMailCategoryDisplayURL, empMailCategoryDropDownSearchURL } from "../../Config/config";
 import Heading from "../../Heading/Heading";
 import { useParams, useNavigate } from 'react-router-dom';
-import { editEmpAddress, editEmpMaster, editEmpTelephone, getEmployeeAddress, getEmployeeEditDetails, getEmployeeTelephone } from "../../../services/EmployeeList";
+import {  editEmpMaster, getEmployeeAddress, getEmployeeEditDetails, getEmployeeTelephone, getEmployeeMail} from "../../../services/EmployeeList";
 
 const initialEmployeeData = {
     empTitle: '',
@@ -33,10 +33,16 @@ const initialTelephoneData = {
     epabx: '',
 }
 
+const initialMailData = {
+    empId: '',
+    email: '',
+    mailCatId: '',
+}
 const EditEmployee = () => {
     const [newEmployeeData, setNewEmployeeData] = useState(initialEmployeeData);
     const [newAddressData, setNewAddressData] = useState(initialAddressData);
-    const [newTelephoneData, setNewTelephoneData] = useState(initialTelephoneData);
+    const [newTelephoneData, setNewTelephoneData] = useState([initialTelephoneData]);
+    const [newMailData, setNewMailData] = useState([initialMailData]);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
@@ -49,23 +55,24 @@ const EditEmployee = () => {
         fetchEmployeeDetails(id);
 
     }, [id]);
-
     const fetchEmployeeDetails = async (employeeId) => {
-       try{
-        // Fetching Employee Details
-        const empResult = await getEmployeeEditDetails(employeeId);
-        setNewEmployeeData({ ...initialEmployeeData, ...empResult });
-        const addressResult = await getEmployeeAddress(employeeId);
-        setNewAddressData({ ...initialAddressData, ...addressResult });
-        const telephoneResult = await getEmployeeTelephone(employeeId);
-        setNewTelephoneData({ ...initialTelephoneData, ...telephoneResult });
-
-        }catch (error) {
-            console.error('Error fetching Employee details:', error);
-            throw error;
-        }
-    
-    }
+        try{
+         // Fetching Employee Details
+         const empResult = await getEmployeeEditDetails(employeeId);
+         setNewEmployeeData({ ...initialEmployeeData, ...empResult });
+         const addressResult = await getEmployeeAddress(employeeId);
+         setNewAddressData({ ...initialAddressData, ...addressResult });
+         const telephoneResult = await getEmployeeTelephone(employeeId);
+         setNewTelephoneData([...telephoneResult ]);
+         const mailResult = await getEmployeeMail(employeeId);
+        setNewMailData([...mailResult]);
+ 
+         }catch (error) {
+             console.error('Error fetching Employee details:', error);
+             throw error;
+         }
+     
+     }
 
     const handleEditEmployee = async (e) => {
         e.preventDefault();
@@ -77,10 +84,8 @@ const EditEmployee = () => {
             setSubmissionError('');
             try {
                 // Putting Employee Details
-                await editEmpMaster(id, newEmployeeData);
-                await editEmpAddress(id, newAddressData);
-                await editEmpTelephone(id, newTelephoneData);
-                alert('Employee details updated successfully.');
+                await editEmpMaster(id, newEmployeeData, newAddressData, newTelephoneData, newMailData);
+                 alert('Employee details updated successfully.');
 
                 setIsSubmitting(false);
 
@@ -107,13 +112,33 @@ const EditEmployee = () => {
             [name]: value,
         }));
     };
-    const hanldeTelephoneChange = (e) => {
+    const handleTelephoneChange = (index, e) => {
         const { name, value } = e.target;
-        setNewTelephoneData(prevState => ({
-            ...prevState,
-            [name]: value,
-        }));
+        const updatedTelephones = newTelephoneData.map((tel, i) => {
+            if (i === index) {
+                return { ...tel, [name]: value };
+            }
+            return tel;
+        });
+        setNewTelephoneData(updatedTelephones);
     };
+    const handleAddNewTelephone = () => setNewTelephoneData([...newTelephoneData, initialTelephoneData]);
+    const handleRemoveTelephone = (index) => setNewTelephoneData(newTelephoneData.filter((tel, i) => i !== index));
+
+    const handleMailChange = (index, e) => {
+        const { name, value } = e.target;
+        const updatedMails = newMailData.map((mail, i) => {
+            if (i === index) {
+                return { ...mail, [name]: value };
+            }
+            return mail;
+        });
+        setNewMailData(updatedMails);
+    };
+
+    const handleAddNewMail = () => setNewMailData([...newMailData, initialMailData]);
+    const handleRemoveMail = (index) => setNewMailData(newMailData.filter((mail, i) => i !== index));
+
     const handleExit = () => {
         setErrors({});
         setSubmissionError('');
@@ -124,71 +149,57 @@ const EditEmployee = () => {
 
     const validateForm = () => {
         const validationErrors = {};
-        const noSpaceRegex = /^[A-Za-z]+$/;
-        const noSpecialCharRegex = /^[A-Za-z]+$/;
+        const letterOnlyRegex = /^[A-Za-z]+$/;
+        const letterAndNumberRegex = /^[A-Za-z0-9]+$/;
+        const phoneRegex = /^\d{10}$/;
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-        if (!newEmployeeData.empTitle.trim()) {
-            validationErrors.empTitle = 'Title is required.';
-        } else if (!noSpecialCharRegex.test(newEmployeeData.empTitle)) {
-            validationErrors.empTitle = 'Title must contain only letters without special characters or spaces.';
-        }
+        const validateField = (value, fieldName, regex = null) => {
+            if (!value.trim()) {
+                validationErrors[fieldName] = `${fieldName} is required.`;
+            } else if (regex && !regex.test(value)) {
+                validationErrors[fieldName] = `${fieldName} is invalid.`;
+            }
+        };
 
-        if (!newEmployeeData.empFirstName.trim()) {
-            validationErrors.empFirstName = 'First Name is required.';
-        } else if (!noSpaceRegex.test(newEmployeeData.empFirstName)) {
-            validationErrors.empFirstName = 'First Name must contain only letters without spaces.';
-        }
-        if (!newEmployeeData.empLastName.trim()) {
-            validationErrors.empLastName = 'Last Name is required.';
-        } else if (!noSpaceRegex.test(newEmployeeData.empLastName)) {
-            validationErrors.empLastName = 'Last Name must contain only letters without spaces.';
-        }
-        if (!newEmployeeData.empDesignId) {
-            validationErrors.Designation = 'Designation is required.';
-        }
-        if (!newEmployeeData.officeRoomNo.trim()) {
-            validationErrors.officeRoomNo = 'Office Room No. is required.';
-        } else if (/[^A-Za-z0-9]/.test(newEmployeeData.officeRoomNo)) {
-            validationErrors.officeRoomNo = 'Office Room No. must not contain special characters or spaces.';
-        }
-        if (!newEmployeeData.labId) {
-            validationErrors.Lab = 'Lab Name is required.';
-        }
+        // Validate employee details
+        validateField(newEmployeeData.empTitle, 'empTitle', letterOnlyRegex);
+        validateField(newEmployeeData.empFirstName, 'empFirstName', letterOnlyRegex);
+        validateField(newEmployeeData.empLastName, 'empLastName', letterOnlyRegex);
+        validateField(newEmployeeData.officeRoomNo, 'officeRoomNo', letterAndNumberRegex);
+        if (!newEmployeeData.empDesignId) validationErrors.Designation = 'Designation is required.';
+        if (!newEmployeeData.labId) validationErrors.Lab = 'Lab Name is required.';
+        if (!newEmployeeData.empRoleId) validationErrors.Role = 'Employee Role is required.';
 
-        if (!newEmployeeData.empRoleId) {
-            validationErrors.Role = 'Employee Role is required.';
-        }
+        // Validate address details
+        validateField(newAddressData.addressLine1, 'Address Line 1');
+        validateField(newAddressData.addressLine2, 'Address Line 2');
+        if (!newAddressData.cityId) validationErrors.City = 'City is required.';
+        if (!newAddressData.zipcodeId) validationErrors.zipcode = 'Zip Code is required.';
 
-        if (newAddressData.addressLine1.trim() === '') {
-            validationErrors.addressLine1 = 'Address Line 1 is required.';
-        }
-        if (!newAddressData.addressLine2.trim()) {
-            validationErrors.addressLine2 = 'Address Line 2 is required.';
-        }
-        if (!newAddressData.cityId) {
-            validationErrors.City = 'City is required.';
-        }
-        if (!newAddressData.zipcodeId) {
-            validationErrors.zipcode = 'Zip Code is required.';
-        }
-        if (!newTelephoneData.teleCatId) {
-            validationErrors.TelephoneCategory = 'Telephone Category is required.';
-        }
-        if (!newTelephoneData.telephoneNumber.trim()) {
-            validationErrors.telephoneNumber = 'Telephone number is required.';
-        } else if (!/^\d{10}$/.test(newTelephoneData.telephoneNumber)) {
-            validationErrors.telephoneNumber = 'Telephone number must be a 10-digit number.';
-        }
+        // Validate telephone numbers
+        newTelephoneData.forEach((tel, index) => {
+            if (!tel.teleCatId) validationErrors[`teleCatId_${index}`] = 'Telephone Category is required.';
+            validateField(tel.telephoneNumber, `telephoneNumber_${index}`, phoneRegex);
+            validateField(tel.epabx, `epabx_${index}`);
+        });
+
+        // Validate email
+        newMailData.forEach((mail, index) => {
+            if (!mail.mailCatId) validationErrors[`mailCategoty_${index}`] = 'Mail Category is required.';
+            validateField(mail.email, `Email_${index}`, emailRegex);
+        });
+
 
         return validationErrors;
     };
-
     const handleDropdownError = (name, error) => {
         setErrors(prevErrors => ({
             ...prevErrors,
             [name]: error ? `${name} is required.` : '',
         }));
     };
+
 
     return (
         <form onSubmit={handleEditEmployee} className="create-emp">
@@ -308,44 +319,89 @@ const EditEmployee = () => {
                 </div>
             </div>
             {/* Telephone Fields */}
-            <div className="form-fields">
-                <div className="form-group">
-                    <label htmlFor="telephoneNumber">Telephone Number</label>
-                    <input
-                        type="text"
-                        id="telephoneNumber"
-                        name="telephoneNumber"
-                        placeholder="Enter Telephone Number"
-                        value={newTelephoneData.telephoneNumber}
-                        onChange={hanldeTelephoneChange}
-                    />
-                    {errors.telephoneNumber && <span className="error">{errors.telephoneNumber}</span>}
+            {newTelephoneData.map((tel, index) => (
+                <div key={index} className="form-fields">
+                    <div className="form-group">
+                        <label htmlFor={`telephoneNumber_${index}`}>Telephone Number</label>
+                        <input
+                            type="text"
+                            id={`telephoneNumber_${index}`}
+                            name="telephoneNumber"
+                            placeholder="Enter Telephone Number"
+                            value={tel.telephoneNumber}
+                            onChange={(e) => handleTelephoneChange(index, e)}
+                        />
+                        {errors[`telephoneNumber_${index}`] && <span className="error">{errors[`telephoneNumber_${index}`]}</span>}
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor={`teleCatId_${index}`}>Telephone Category</label>
+                        <SearchableDropDown
+                            placeholder="Select Telephone Category"
+                            url={telephoneCategoryDropDownSearchURL}
+                            name="teleCatId"
+                            onChange={(e) => handleTelephoneChange(index, e)}
+                            onError={(error) => handleDropdownError(`teleCatId_${index}`, error)}
+                            initialValue={tel.teleCatId}
+                            displayURL={telephoneCategoryDisplayURL}
+                        />
+                        {errors[`teleCatId_${index}`] && <span className="error">{errors[`teleCatId_${index}`]}</span>}
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor={`epabx_${index}`}>EPABX</label>
+                        <input
+                            type="text"
+                            id={`epabx_${index}`}
+                            name="epabx"
+                            placeholder="Enter EPABX"
+                            value={tel.epabx}
+                            onChange={(e) => handleTelephoneChange(index, e)}
+                        />
+                        {errors[`epabx_${index}`] && <span className="error">{errors[`epabx_${index}`]}</span>}
+                    </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="teleCatId">Telephone Category</label>
-                    <SearchableDropDown
-                        placeholder="Select Telephone Category"
-                        url={telephoneCategoryDropDownSearchURL}
-                        name="teleCatId"
-                        onChange={hanldeTelephoneChange}
-                        onError={(error) => handleDropdownError('Telephone Category', error)}
-                        initialValue={newTelephoneData.teleCatId}
-                        displayURL={telephoneCategoryDisplayURL}
-                    />
-                    {errors.TelephoneCategory && <span className="error">{errors.TelephoneCategory}</span>}
+            ))}
+            <div className="telephone-buttons">
+
+                <button type="button" onClick={handleAddNewTelephone} className="telephone-btn">Add New Telephone</button>
+                {newTelephoneData.length > 1 && <button type="button" onClick={() => handleRemoveTelephone(newTelephoneData.length - 1)} className="telephone-btn">Remove Telephone</button>    }
+            </div>
+
+            {/* Employee Mail  */}
+            {newMailData.map((mail, index) => (
+
+                <div key={index} className="form-fields">
+                    <div className="form-group">
+                        <label htmlFor={`email_${index}`}>Email</label>
+                        <input
+                            type="email"
+                            id={`email_${index}`}
+                            name="email"
+                            placeholder="Enter Email"
+                            value={mail.email}
+                            onChange={(e) => handleMailChange(index, e)}
+                        />
+                        {errors[`Email_${index}`] && <span className="error">{errors[`Email_${index}`]}</span>}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor={`mailCatId_${index}`}>Mail Category</label>
+                        <SearchableDropDown
+                            placeholder="Select Mail Category"
+                            url={empMailCategoryDropDownSearchURL}
+                            name="mailCatId"
+                            onChange={(e) => handleMailChange(index, e)}
+                            onError={(error) => handleDropdownError(`mailCatId_${index}`, error)}
+                            initialValue={mail.mailCatId}
+                            displayURL={empMailCategoryDisplayURL}
+                        />
+                        {errors[`mailCategoty_${index}`] && <span className="error">{errors[`mailCategoty_${index}`]}</span>}
+                    </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="epabx">EPABX</label>
-                    <input
-                        type="text"
-                        id="epabx"
-                        name="epabx"
-                        placeholder="Enter EPABX"
-                        value={newTelephoneData.epabx}
-                        onChange={hanldeTelephoneChange}
-                    />
-                    {errors.epabx && <span className="error">{errors.epabx}</span>}
-                </div>
+            ))}
+            <div className="mail-buttons">
+                <button type="button" onClick={handleAddNewMail} className="mail-btn">Add New Email</button>
+                {newMailData.length > 1 && <button type="button" onClick={() => handleRemoveMail(newMailData.length - 1)} className="mail-btn">Remove Email</button>}
             </div>
             {/* Address Fields */}
             <div className="form-fields">

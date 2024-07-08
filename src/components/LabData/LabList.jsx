@@ -57,9 +57,15 @@ const LabList = () => {
         }
     }, []);
 
+
+
     useEffect(() => {
         fetchData(currentPage, recordsPerPage, debouncedSearchTerm, selectedFilters);
     }, [currentPage, debouncedSearchTerm, selectedFilters]);
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [searchTerm]);
+
     
     useEffect(() => {
         const handler = setTimeout(() => {

@@ -3,7 +3,7 @@ import './CreateLabList.css';
 
 import Heading from '../Heading/Heading';
 import SearchableDropDown from '../SearchableDropDown/SearchableDropDown';
-import { createLabMaster, createLabAddress } from '../../services/EmployeeList';
+import { createLabMaster } from '../../services/EmployeeList';
 import { labCategoryDropDownSearchURL, labClusterDropDownSearchURL, cityDropDownSearchURL, zipcodeDropDownSearchURL } from '../Config/config';
 
 const initialLabData = {
@@ -47,8 +47,7 @@ function CreateLabList() {
             try {
                 let id;
                 id = await createLabMaster(labData);
-                labAddress.labId = id;
-                await createLabAddress(labAddress);
+                
             } catch (error) {
                 console.error('Error creating lab:', error);
                 setSubmissionError('Error creating lab');

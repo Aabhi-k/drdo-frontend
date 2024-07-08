@@ -59,7 +59,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  margin: 20px 0;
   gap: 50px;
 }
 
@@ -120,3 +120,25 @@
   margin-top: 10px;
   grid-column: span 3;
 }
+.telephone-buttons, .mail-buttons{
+display: flex;
+gap: 20px;
+
+}
+.telephone-btn, .mail-btn {
+    background-color: #0056b3; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 16px; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    transition: 0.3s ease; 
+}
+
+.telephone-btn:hover, .mail-btn:hover {
+    background-color: #007bff; 
+    transform: scale(1.05); 
+}
+
