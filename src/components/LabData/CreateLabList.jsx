@@ -24,11 +24,27 @@ const initialLabAddress = {
     zipcodeId: '',
     labId: '',
 }
-
+const initialLabEpabx = {
+    epabx: '',
+    didNo: '',
+}
+const initialLabTelephone = {
+    telephoneNo: '',
+    teleCatId: '',
+    stdCodeId: '',
+}
+const initialLabFax = {
+    stdCodeId: '',
+    faxNo: '',
+    faxCatId: '',
+}
 
 function CreateLabList() {
     const [labData, setLabData] = useState(initialLabData);
     const [labAddress, setLabAddress] = useState(initialLabAddress);
+    const [labEpabx, setLabEpabx] = useState(initialLabEpabx);
+    const [labTelephone, setLabTelephone] = useState(initialLabTelephone);
+    const [labFax, setLabFax] = useState(initialLabFax);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
