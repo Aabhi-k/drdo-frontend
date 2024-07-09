@@ -6,7 +6,7 @@ import menuBar from "../../../imgs/menu.png"
 import SearchBar from "../../SearchBar/SearchBar";
 import Pagination from "../../Pagination/Pagination";
 import Heading from "../../Heading/Heading";
-import { searchEmpDesignation, getEmpDesignation } from "../../../services/EmployeeList";
+import { searchEmpDesignation, getEmpDesignation } from "../../../services/BackEndServiceCall";
 
 const EmployeeDesignation = () => {
     const [empDesignation, setEmpDesignation] = useState([]);

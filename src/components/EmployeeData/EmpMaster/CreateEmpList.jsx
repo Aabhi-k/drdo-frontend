@@ -4,7 +4,7 @@ import "./CreateEmpList.css";
 import SearchableDropDown from "../../SearchableDropDown/SearchableDropDown";
 import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDropDownSearchURL, zipcodeDropDownSearchURL, cityDropDownSearchURL, telephoneCategoryDropDownSearchURL, empMailCategoryDropDownSearchURL } from "../../Config/config";
 import Heading from "../../Heading/Heading";
-import { createEmpMaster } from "../../../services/EmployeeList";
+import { createEmpMaster } from "../../../services/BackEndServiceCall";
 import { useNavigate } from "react-router-dom";
 
 const initialEmployeeData = {

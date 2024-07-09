@@ -17,6 +17,7 @@ const getEmpTelephoneURL = `${baseSpringURL}/emp/telephone`;
 const getEmpMailURL = `${baseSpringURL}/emp/mail`;
 // Lab's URL
 const labMasterURL = "/lab";
+const labDetailsURL = `${labMasterURL}/details`;
 
 // Searching
 // Employee's URL
@@ -78,6 +79,7 @@ export default {
     empDesignationURL,
     empAddressDetailsURL,
     labMasterURL,
+    labDetailsURL,
     empMasterSearchURL,
     empDesignationSearchURL,
     empDesignationDropDownSearchURL,

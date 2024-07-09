@@ -11,6 +11,7 @@ const buildQueryString = (filters, pageNo, sizeNo, searchTerm = '') => {
     const searchQueryString = searchTerm ? `query=${encodeURIComponent(searchTerm)}&` : '';
     return `${searchQueryString}${filtersQueryString}&page=${encodeURIComponent(pageNo)}&size=${encodeURIComponent(sizeNo)}`;
 };
+// Updated catch blocks to use handleHttpError and return []
 
 // GET Employee Master
 export const getEmpList = async (filters, pageNo, sizeNo) => {
@@ -29,6 +30,7 @@ export const getEmpList = async (filters, pageNo, sizeNo) => {
         }
     } catch (error) {
         handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -47,8 +49,8 @@ export const getEmpDesignation = async (pageNo, sizeNo) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching employee designation:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -67,8 +69,8 @@ export const getLabList = async (filters, pageNo, sizeNo) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching lab list:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -87,8 +89,8 @@ export const searchEmpMaster = async (searchTerm, filters, pageNo, sizeNo) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error searching employee master:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -106,8 +108,8 @@ export const searchEmpDesignation = async (searchTerm, pageNo, sizeNo) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error searching employee designation:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -126,10 +128,11 @@ export const searchLabMaster = async (searchTerm, filters, pageNo, sizeNo) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error searching lab master:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
+
 // Create Employee Master
 export const createEmpMaster = async (empMaster, empTelephoneMasterDTOs, empMailMasterDTOs, empResidentialAddressDTO) => {
     
@@ -147,14 +150,14 @@ export const createEmpMaster = async (empMaster, empTelephoneMasterDTOs, empMail
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error creating employee master:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
 
-export const createLabMaster = async (labData) => {
+export const createLabMaster = async (labMasterDTO, labAddressDTO, labEpabxDTO, labFaxMasterDTO, labTelephoneMasterDTO) => {
     try {
-        const response = await api.post(config.createLabMasterURL, labData);
+        const response = await api.post(config.createLabMasterURL, labMasterDTO);
         if(response.status === 200) {
             return response.data;
         }
@@ -162,8 +165,8 @@ export const createLabMaster = async (labData) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error creating lab master:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -183,6 +186,7 @@ export const dropdownSearch = async (url, searchTerm) => {
         }
     } catch (error) {
         handleHttpError(error.response.status);
+        return [];
     }
 };
 
@@ -199,8 +203,8 @@ export const getDropdownDisplay = async (displayURL, initialValue) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error("Error fetching display value:", error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 
 }
@@ -218,8 +222,8 @@ export const getEmployeeDetails = async (id) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching employee details:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 export const getEmployeeEditDetails = async (id) => {
@@ -235,8 +239,8 @@ export const getEmployeeEditDetails = async (id) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching employee edit details:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 
@@ -253,8 +257,8 @@ export const getEmployeeAddress = async (id) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching employee address:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 
@@ -271,8 +275,8 @@ export const getEmployeeTelephone = async (id) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching employee telephone:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 export const getEmployeeMail = async (id) => {
@@ -288,8 +292,8 @@ export const getEmployeeMail = async (id) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error fetching employee mail:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 
@@ -307,8 +311,8 @@ export const editEmpMaster = async (id, employeeData) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error editing employee master:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 
@@ -327,8 +331,8 @@ export const editEmpAddress = async (id, addressData) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error editing employee address:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 
@@ -346,11 +350,27 @@ export const editEmpTelephone = async (id, telephoneData) => {
             handleHttpError(response.status);
         }
     } catch (error) {
-        console.error('Error editing employee telephone:', error);
-        throw error;
+        handleHttpError(error.response.status);
+        return [];
     }
 }
 
+// Get lab Details
 
-
-
+export const getLabDetails = async (id) => {
+    try {
+        const response = await api.get(`${config.labDetailsURL}/${id}`);
+        if(response.status === 204) {
+            return [];
+        }
+        else if(response.status === 200) {
+            return response.data;
+        }
+        else {
+            handleHttpError(response.status);
+        }
+    } catch (error) {
+        handleHttpError(error.response.status);
+        return [];
+    }
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './EmployeeDetails.css';
 import Heading from '../../Heading/Heading';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getEmployeeDetails } from '../../../services/EmployeeList';
+import { getEmployeeDetails } from '../../../services/BackEndServiceCall';
 
 
 // NEEDS UPDATION TO HANDLE ARRAY VALUES

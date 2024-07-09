@@ -5,7 +5,7 @@ import { empDesignationDropDownSearchURL, labMasterDropDownSearchURL, empRoleDro
 import { empDesignationDisplayURL, empRoleDisplayURL, cityDisplayURL, telephoneCategoryDisplayURL, zipcodeDisplayURL, labMasterDisplayURL, empMailCategoryDisplayURL, empMailCategoryDropDownSearchURL } from "../../Config/config";
 import Heading from "../../Heading/Heading";
 import { useParams, useNavigate } from 'react-router-dom';
-import {  editEmpMaster, getEmployeeAddress, getEmployeeEditDetails, getEmployeeTelephone, getEmployeeMail} from "../../../services/EmployeeList";
+import {  editEmpMaster, getEmployeeAddress, getEmployeeEditDetails, getEmployeeTelephone, getEmployeeMail} from "../../../services/BackEndServiceCall";
 
 const initialEmployeeData = {
     empTitle: '',

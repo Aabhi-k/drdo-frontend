@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import './EmployeeList.css';
 import { useNavigate } from 'react-router-dom';
 
-import { getEmpList, searchEmpMaster,  } from "../../../services/EmployeeList.js";
+import { getEmpList, searchEmpMaster,  } from "../../../services/BackEndServiceCall.js";
 import Pagination from "../../Pagination/Pagination.jsx";
 import SearchBar from "../../SearchBar/SearchBar.jsx";
 import menuBar from "../../../imgs/menu.png";
@@ -74,6 +74,8 @@ const EmployeeList = () => {
 
     const handleCreateEmployee = () => navigate('/employee/create');
     const handleEmpDesignation = () => navigate('/employee/designation');
+    const handleRowClick = (id) => navigate(`/employee/details/${id}`);
+    
     const toggleDropdown = () => setIsOpen(prevState => !prevState);
 
     const handleApplyFilter = (filters) => {
@@ -81,9 +83,6 @@ const EmployeeList = () => {
         setCurrentPage(0);
     };
 
-    const handleRowClick = (id) => {
-        navigate(`/employee/details/${id}`);
-    };
 
     return (
         <div className="emp-list">

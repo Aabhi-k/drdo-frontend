@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { getLabList, searchLabMaster } from "../../services/EmployeeList";
+import { getLabList, searchLabMaster } from "../../../services/BackEndServiceCall.js";
 import './LabList.css';
 import { useNavigate } from "react-router-dom";
 
-import SearchBar from "../SearchBar/SearchBar.jsx";
-import Pagination from "../Pagination/Pagination.jsx";
-import Heading from "../Heading/Heading.jsx";
-import menuBar from "../../imgs/menu.png";
-import FilterBar from "../FilterBar/FilterBar.jsx";
+import SearchBar from "../../SearchBar/SearchBar.jsx";
+import Pagination from "../../Pagination/Pagination.jsx";
+import Heading from "../../Heading/Heading.jsx";
+import menuBar from "../../../imgs/menu.png";
+import FilterBar from "../../FilterBar/FilterBar.jsx";
 
-import { labCategoryDropDownSearchURL, labClusterDropDownSearchURL, cityDropDownSearchURL } from "../Config/config.js";
+import { labCategoryDropDownSearchURL, labClusterDropDownSearchURL, cityDropDownSearchURL } from "../../Config/config.js";
 
 
 const filterConfigs = [
@@ -91,6 +91,9 @@ const LabList = () => {
         setSelectedFilters(filters);
         setCurrentPage(0);
     };
+    const handleRowClick = (id) => {
+        navigate(`/lab/details/${id}`);
+    }
 
     return (
         <div className="lab-list">
@@ -106,7 +109,8 @@ const LabList = () => {
 
                     <div className="dropdown-content">
                         <button className="create-btn" onClick={handleCreateLab} >Create Lab</button>
-                        <button className="edit-emp" onClick={handleEditLab}>Edit Lab</button>
+                        <button className="lab-cluster">Lab Cluster</button>
+                        <button className="lab-category">Lab Category</button>
                     </div>
                 </div>
 
@@ -114,7 +118,7 @@ const LabList = () => {
             {error && <p>Error: {error.message}</p>}
             
                 <>
-                    <DataTable lab={lab} isLoading={isLoading}/>
+                    <DataTable lab={lab} isLoading={isLoading} onRowClick={handleRowClick}/>
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
                 </>
             
@@ -124,7 +128,7 @@ const LabList = () => {
     );
 }
 
-const DataTable = ({ lab, isLoading }) => {
+const DataTable = ({ lab, isLoading, onRowClick }) => {
     return (
         <table className="labTable">
             <thead>
@@ -139,10 +143,9 @@ const DataTable = ({ lab, isLoading }) => {
                 </tr>
             </thead>
             <tbody>
-                {lab.length > 0 ?
-                (
+                {lab.length > 0 ? (
                     lab.map((lab, index) => (
-                        <tr key={index}>
+                        <tr key={index} onDoubleClick={() => onRowClick(lab.id)}>
                             <td>{lab.labFullName}</td>
                             <td>{lab.labAuthName}</td>
                             <td>{lab.labShortName}</td>
@@ -152,14 +155,13 @@ const DataTable = ({ lab, isLoading }) => {
                             <td>{lab.otherGroup}</td>
                         </tr>
                     ))
-
-                ): (
-                    !isLoading &&(
-                    <tr>
-                        <td colSpan="7" className="no-data-message">
-                            <p>No data available</p>
-                        </td>
-                    </tr>
+                ) : (
+                    !isLoading && (
+                        <tr>
+                            <td colSpan="7" className="no-data-message">
+                                <p>No data available</p>
+                            </td>
+                        </tr>
                     )
                 )}
             </tbody>
